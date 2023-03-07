@@ -3,7 +3,7 @@ import Header from "./components/Header";
 import RestaurantCard from "./components/RestaurantCard";
 import SearchSideBar from "./components/SearchSideBar";
 import ErrorComponent from "../restaurant/[slug]/components/ErrorComponent";
-import { PrismaClient, type Cuisine, type Location, type PRICE } from "@prisma/client";
+import { PrismaClient, type Review, type Cuisine, type Location, type PRICE } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -20,6 +20,7 @@ export type SearchRestaurantType = {
   cuisine: Cuisine;
   location: Location;
   slug: string;
+  reviews: Review[];
 };
 
 const getRestaurantsByCity = async ({ city, cuisine, price }: searchParamsType): Promise<SearchRestaurantType[]> => {
@@ -27,6 +28,7 @@ const getRestaurantsByCity = async ({ city, cuisine, price }: searchParamsType):
     name: true,
     main_image: true,
     price: true,
+    reviews: true,
     cuisine: true,
     location: true,
     slug: true,

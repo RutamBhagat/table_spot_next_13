@@ -1,4 +1,4 @@
-import { PRICE, PrismaClient } from "@prisma/client";
+import { PrismaClient, type Review } from "@prisma/client";
 import React from "react";
 import Images from "./components/Images";
 import Rating from "./components/Rating";
@@ -14,6 +14,7 @@ export type RestaurantBySlugType = {
   images: string[];
   description: string;
   slug: string;
+  reviews: Review[];
 };
 
 const getRestaurantBySlug = async (name: string): Promise<RestaurantBySlugType | null> => {
@@ -26,8 +27,9 @@ const getRestaurantBySlug = async (name: string): Promise<RestaurantBySlugType |
       name: true,
       images: true,
       description: true,
-      slug: true
-    }
+      slug: true,
+      reviews: true,
+    },
   });
   return restaurant;
 };
@@ -50,14 +52,14 @@ const ID = async ({ params }: { params: { slug: string } }) => {
           <h1 className="font-bold text-6xl">{restaurant.name}</h1>
         </div>
         {/* TITLE */}
-        <Rating />
+        <Rating reviews={restaurant.reviews} />
         {/* DESCRIPTION */}
         <div className="mt-4">
           <p className="text-lg font-light">{restaurant.description}</p>
         </div>
         {/* DESCRIPTION */}
         <Images images={restaurant.images} />
-        <Reviews />
+        <Reviews reviews={restaurant.reviews} />
       </div>
       <div className="w-[27%] relative text-reg">
         <ReservationCard />
