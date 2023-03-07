@@ -38,9 +38,7 @@ const ID = async ({ params }: { params: { slug: string } }) => {
   const restaurant = await getRestaurantBySlug(params.slug);
 
   if (!restaurant) {
-    //Note the null error is handled in layout.tsx file,
-    //there was some problem with the error boundry now working as expected
-    return <></>;
+    throw new Error("Restaurant not found");
   }
 
   return (
