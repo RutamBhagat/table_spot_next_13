@@ -6,14 +6,14 @@ const PriceComponent = ({ price }: { price: PRICE }) => {
     <div className="mr-3 font-medium">
       {price === "CHEAP" ? (
         <p>
-          $$<span className="text-gray-400">$$</span>
+          $<span className="text-gray-400">$$</span>
         </p>
       ) : price === "REGULAR" ? (
         <p>
-          $$$<span className="text-gray-400">$</span>
+          $$<span className="text-gray-400">$</span>
         </p>
       ) : (
-        <p>$$$$</p>
+        <p>$$$</p>
       )}
     </div>
   );

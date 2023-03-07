@@ -8,9 +8,9 @@ const SearchBar = () => {
 
   const handleSearch = () => {
     if (location.length > 0) {
-      // router.push(`/search/${location}`);
-      router.push("/search");
+      router.push(`/search?city=${location.toLowerCase()}`);
     }
+    setLocation("")
   };
 
   return (
