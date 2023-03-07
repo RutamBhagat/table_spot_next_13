@@ -19,7 +19,7 @@ const Rating = ({
   const totalRestaurantRating = reviews.reduce((acc, inst) => {
     return acc + inst.rating;
   }, 0);
-  const averageRestaurantRating = parseFloat((totalRestaurantRating / searchreviews.length || 0).toFixed(1));
+  const averageRestaurantRating = parseFloat((totalRestaurantRating / reviews.length || 0).toFixed(1));
 
   return (
     <div className="flex items-end">
