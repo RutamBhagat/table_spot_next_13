@@ -7,6 +7,12 @@ import { PrismaClient, type Cuisine, type Location, type PRICE } from "@prisma/c
 
 const prisma = new PrismaClient();
 
+export type searchParamsType = {
+  city: string;
+  cuisine?: string;
+  price?: PRICE;
+};
+
 export type SearchRestaurantType = {
   name: string;
   main_image: string;
@@ -16,15 +22,7 @@ export type SearchRestaurantType = {
   slug: string;
 };
 
-const getRestaurantsByCity = async ({
-  city,
-  cuisine,
-  price,
-}: {
-  city: string;
-  cuisine?: string;
-  price?: PRICE;
-}): Promise<SearchRestaurantType[]> => {
+const getRestaurantsByCity = async ({ city, cuisine, price }: searchParamsType): Promise<SearchRestaurantType[]> => {
   const select = {
     name: true,
     main_image: true,
@@ -34,16 +32,20 @@ const getRestaurantsByCity = async ({
     slug: true,
   };
 
-  const where: { location?: { name: string }; cuisine?: { name: string }; price?: PRICE } = {};
+  const where: {
+    location?: { name: string };
+    cuisine?: { name: string };
+    price?: PRICE;
+  } = {};
 
   if (city) {
-    where["location"] = { name: city };
+    where.location = { name: city };
   }
   if (cuisine) {
-    where["cuisine"] = { name: cuisine };
+    where.cuisine = { name: cuisine };
   }
   if (price) {
-    where["price"] = price;
+    where.price = price;
   }
 
   if (!city && !cuisine && !price) {
@@ -84,7 +86,6 @@ const Search = async ({ searchParams }: { searchParams: { city: string; cuisine:
   const restaurants = await getRestaurantsByCity(searchParams);
   const locations = await getLocations();
   const cuisines = await getCuisines();
-
 
   return (
     <>
