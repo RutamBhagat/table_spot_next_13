@@ -1,34 +1,17 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
-import * as jose from "jose";
 import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
-    const bearerToken = req.headers.authorization;
+    const bearerToken = req.headers.authorization as string;
     const token = bearerToken?.split(" ")[1];
-    if (!bearerToken || !token) {
-      return res.status(401).json({ error: "Please provide authorization token" });
-    }
-
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-
-    //Token varification
-    try {
-      await jose.jwtVerify(token, secret);
-    } catch (error) {
-      return res.status(401).json({ error: "Unauthorized request" });
-    }
 
     //Token decoding and extracting email from it
-    type PayloadType = {
-      email: string;
-      exp: number;
-    };
-    const payload = jwt.decode(token) as PayloadType;
+    const payload = jwt.decode(token) as { email: string };
     if (!payload.email) {
       return res.status(401).json({ error: "Unauthorized request" });
     }
