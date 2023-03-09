@@ -32,7 +32,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    return res.status(200).json({ user });
+    if (!user) {
+      return res.status(404).json({ errorMessage: "User not found" });
+    }
+
+    return res.status(200).json({
+      id: user.id,
+      firstName: user.first_name,
+      lastName: user.last_name,
+      email: user.email,
+      phone: user.phone,
+      city: user.city,
+    });
   } else {
     return res.status(405).json({ name: "Method not allowed" });
   }

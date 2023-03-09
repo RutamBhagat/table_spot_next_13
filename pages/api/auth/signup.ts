@@ -4,6 +4,7 @@ import validator from "validator";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import * as jose from "jose";
+import { setCookie } from "cookies-next";
 
 const prisma = new PrismaClient();
 
@@ -39,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     validationSchema.forEach((check) => {
       if (!check.valid) {
-        res.status(400).json({ error: check.errorMessage });
+        res.status(400).json({ errorMessage: check.errorMessage });
         return;
       }
     });
@@ -50,7 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
     if (userByEmail) {
-      res.status(400).json({ error: "Email already exists" });
+      res.status(400).json({ errorMessage: "Email already exists" });
       return;
     }
 
@@ -77,8 +78,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .setExpirationTime("24h")
       .sign(secret);
 
-    return res.status(200).json({ token });
+    //cookie will expire in 6 days
+    setCookie("jwt", token, { req, res, maxAge: 24 * 60 * 60 * 6 });
+
+    return res.status(200).json({
+      firstName: user.first_name,
+      lastName: user.last_name,
+      email: user.email,
+      phone: user.phone,
+      city: user.city,
+    });
   } else {
-    return res.status(405).json({ name: "Method not allowed" });
+    return res.status(405).json({ errorMessage: "Method not allowed" });
   }
 }
