@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useContext } from "react";
 import { AuthenticationContext } from "@/app/context/AuthContext";
+import { removeCookies } from "cookies-next";
 
 const useAuth = () => {
-  const { loading, data, error, setAuthState } = useContext(AuthenticationContext);
+  const { setAuthState } = useContext(AuthenticationContext);
 
   const signIn = async ({ email, password }: { email: string; password: string }) => {
     setAuthState({
@@ -77,9 +78,19 @@ const useAuth = () => {
     }
   };
 
+  const signOut = async () => {
+    removeCookies("jwt")
+    setAuthState({
+      loading: false,
+      data: null,
+      error: null,
+    });
+  }
+
   return {
     signIn,
     signUp,
+    signOut
   };
 };
 
