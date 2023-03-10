@@ -1,7 +1,30 @@
-"use client"
-import React from "react";
+"use client";
+import React, { useState } from "react";
+import { partySize, times } from "@/data";
+import shortid from "shortid";
+import DatePicker from "react-datepicker";
 
-const ReservationCard = () => {
+const ReservationCard = ({ open_time, close_time }: { open_time: string; close_time: string }) => {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+
+  let isWithinTimeWindow = false;
+  const timesInWindow = times.filter((time) => {
+    if (time.time === open_time) {
+      isWithinTimeWindow = true;
+    } else if (time.time === close_time) {
+      isWithinTimeWindow = false;
+    }
+    return isWithinTimeWindow;
+  });
+
+  const dateChangeHandler = (date: Date | null) => {
+    if (date) {
+      setSelectedDate(date);
+      return;
+    }
+    setSelectedDate(null);
+  };
+
   return (
     <div className="fixed w-[15%] bg-white rounded p-3 shadow">
       <div className="text-center border-b pb-2 font-bold">
@@ -10,20 +33,31 @@ const ReservationCard = () => {
       <div className="my-3 flex flex-col">
         <label htmlFor="">Party size</label>
         <select name="" className="py-3 border-b font-light" id="">
-          <option value="">1 person</option>
-          <option value="">2 people</option>
+          {partySize.map((size) => (
+            <option key={shortid.generate()} value={size.value}>
+              {size.label}
+            </option>
+          ))}
         </select>
       </div>
       <div className="flex justify-between">
         <div className="flex flex-col w-[48%]">
           <label htmlFor="">Date</label>
-          <input type="text" className="py-3 border-b font-light w-28" />
+          <DatePicker
+            selected={selectedDate}
+            onChange={dateChangeHandler}
+            dateFormat="MMMM d"
+            className="py-3 border-b font-light text-reg w-full"
+          />
         </div>
         <div className="flex flex-col w-[48%]">
           <label htmlFor="">Time</label>
           <select name="" id="" className="py-3 border-b font-light">
-            <option value="">7:30 AM</option>
-            <option value="">9:30 AM</option>
+            {timesInWindow.map((time) => (
+              <option key={shortid.generate()} value={time.time}>
+                {time.displayTime}
+              </option>
+            ))}
           </select>
         </div>
       </div>
