@@ -105,7 +105,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return timeIsAfterOpeningHour && timeIsBeforeClosingHour;
       });
 
-    return res.status(200).json({ availabilities });
+    return res.status(200).json(availabilities);
   } else {
     res.status(400).json({ errorMessage: "Method not allowed" });
   }
