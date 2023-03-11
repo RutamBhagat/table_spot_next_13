@@ -28,7 +28,7 @@ model Restaurant {
   price       PRICE
   items       Item[]
   bookings    Booking[]
-  seats       Table[]
+  tables       Table[]
   reviews     Review[]
   location_id Int
   location    Location  @relation(fields: [location_id], references: [id])
