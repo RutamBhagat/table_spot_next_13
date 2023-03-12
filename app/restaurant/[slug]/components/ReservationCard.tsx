@@ -5,6 +5,7 @@ import shortid from "shortid";
 import DatePicker from "react-datepicker";
 import useAvailabilities from "@/hooks/useAvailabilities";
 import Link from "next/link";
+import { convertToDisplayTime } from "@/utils/convertToDisplayTime";
 
 const ReservationCard = ({ open_time, close_time, slug }: { open_time: string; close_time: string; slug: string }) => {
   const { loading, error, data, fetchAvailabilities } = useAvailabilities();
@@ -44,7 +45,7 @@ const ReservationCard = ({ open_time, close_time, slug }: { open_time: string; c
   };
 
   return (
-    <div className="fixed w-[15%] bg-white rounded p-3 shadow">
+    <div className="fixed bottom-0 right-0 w-[20%] bg-white rounded p-3 shadow">
       <div className="text-center border-b pb-2 font-bold">
         <h4 className="mr-7 text-lg">Make a Reservation</h4>
       </div>
@@ -98,7 +99,7 @@ const ReservationCard = ({ open_time, close_time, slug }: { open_time: string; c
           className="bg-red-600 rounded w-full px-4 text-white font-bold h-16"
         >
           {loading ? (
-            <div role="status">
+            <div className="flex justify-center items-center" role="status">
               <svg
                 aria-hidden="true"
                 className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
@@ -130,12 +131,12 @@ const ReservationCard = ({ open_time, close_time, slug }: { open_time: string; c
               inst.available ? (
                 <Link
                   href={`/reserve/${slug}?date=${day}T${inst.time}&partySize=${partySize}`}
-                  className="bg-red-600 cursor-pointer p-2 w-24 text-center text-white mb-3 rounded mr-3"
+                  className="bg-red-600 cursor-pointer p-2 text-center text-white mb-3 rounded mr-3"
                 >
-                  <p className="text-sm font-bold">{inst.time}</p>
+                  <p className="text-sm font-bold">{convertToDisplayTime(inst.time)}</p>
                 </Link>
               ) : (
-                <div className="bg-gray-600 cursor-pointer p-2 w-24 text-center text-white mb-3 rounded mr-3"></div>
+                <div className="bg-gray-600 cursor-pointer p-2 text-center text-white mb-3 rounded mr-3"></div>
               )
             )}
           </div>

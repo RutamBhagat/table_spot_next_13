@@ -1,5 +1,6 @@
 import { PrismaClient, type Review } from "@prisma/client";
 import React from "react";
+import Header from "./components/Header";
 import Images from "./components/Images";
 import Rating from "./components/Rating";
 import ReservationCard from "./components/ReservationCard";
@@ -46,27 +47,24 @@ const ID = async ({ params }: { params: { slug: string } }) => {
   }
 
   return (
-    <>
-      <div className="bg-white w-[70%] rounded p-3 shadow">
-        <RestaurantNavbar slug={params.slug} />
-        {/* TITLE */}
-        <div className="mt-4 border-b pb-6">
-          <h1 className="font-bold text-6xl">{restaurant.name}</h1>
+    <div className="">
+      {restaurant && <Header name={params.slug} />}
+      <div className="flex m-auto w-2/3 justify-between items-start 0 -mt-11">
+        <div className="bg-white w-[90%] rounded p-3 shadow">
+          <RestaurantNavbar slug={params.slug} />
+          <div className="mt-4 border-b pb-6">
+            <h1 className="font-bold text-6xl">{restaurant.name}</h1>
+          </div>
+          <Rating reviews={restaurant.reviews} />
+          <div className="mt-4">
+            <p className="text-lg font-light">{restaurant.description}</p>
+          </div>
+          <Images images={restaurant.images} />
+          <Reviews reviews={restaurant.reviews} />
         </div>
-        {/* TITLE */}
-        <Rating reviews={restaurant.reviews} />
-        {/* DESCRIPTION */}
-        <div className="mt-4">
-          <p className="text-lg font-light">{restaurant.description}</p>
-        </div>
-        {/* DESCRIPTION */}
-        <Images images={restaurant.images} />
-        <Reviews reviews={restaurant.reviews} />
       </div>
-      <div className="w-[27%] relative text-reg">
-        <ReservationCard open_time={restaurant.open_time} close_time={restaurant.close_time} slug={params.slug} />
-      </div>
-    </>
+      <ReservationCard open_time={restaurant.open_time} close_time={restaurant.close_time} slug={params.slug} />
+    </div>
   );
 };
 
