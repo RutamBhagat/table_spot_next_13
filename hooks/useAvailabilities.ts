@@ -1,4 +1,3 @@
-import { partySize } from "@/data";
 import { useState } from "react";
 import axios from "axios";
 import { type Time } from "@/utils/convertToDisplayTime";
