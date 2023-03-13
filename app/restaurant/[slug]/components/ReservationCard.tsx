@@ -131,12 +131,12 @@ const ReservationCard = ({ open_time, close_time, slug }: { open_time: string; c
               inst.available ? (
                 <Link
                   href={`/reserve/${slug}?date=${day}T${inst.time}&partySize=${partySize}`}
-                  className="bg-red-600 cursor-pointer p-2 text-center text-white mb-3 rounded mr-3"
+                  className="bg-red-600 cursor-pointer p-2 text-center text-white mb-3 rounded mr-3 w-24"
                 >
                   <p className="text-sm font-bold">{convertToDisplayTime(inst.time)}</p>
                 </Link>
               ) : (
-                <div className="bg-gray-600 cursor-pointer p-2 text-center text-white mb-3 rounded mr-3"></div>
+                <div className="bg-gray-400 p-2 text-center text-white mb-3 rounded mr-3 w-24"></div>
               )
             )}
           </div>

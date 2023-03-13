@@ -1,4 +1,4 @@
-import { PRICE } from "@prisma/client";
+import { type PRICE } from "@prisma/client";
 import React from "react";
 
 const PriceComponent = ({ price }: { price: PRICE }) => {

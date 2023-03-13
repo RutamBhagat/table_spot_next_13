@@ -41,7 +41,7 @@ const Slug = async ({
     <div className="border-t h-screen">
       <div className="py-9 w-3/5 m-auto">
         <Header image={restaurant.main_image} name={restaurant.name} date={searchParams.date} partySize={searchParams.partySize} />
-        <Form />
+        <Form slug={params.slug} date={searchParams.date} partySize={searchParams.partySize} />
       </div>
     </div>
   );

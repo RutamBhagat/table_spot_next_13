@@ -1,5 +1,6 @@
 import { PrismaClient, type Review } from "@prisma/client";
 import React from "react";
+import ErrorComponent from "./components/ErrorComponent";
 import Header from "./components/Header";
 import Images from "./components/Images";
 import Rating from "./components/Rating";
@@ -43,7 +44,7 @@ const ID = async ({ params }: { params: { slug: string } }) => {
   const restaurant = await getRestaurantBySlug(params.slug);
 
   if (!restaurant) {
-    throw new Error("Restaurant not found");
+    return <ErrorComponent message="Restaurant not found" />;
   }
 
   return (
