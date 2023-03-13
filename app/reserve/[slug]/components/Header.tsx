@@ -1,12 +1,13 @@
 import { convertToDisplayTime, Time } from "@/utils/convertToDisplayTime";
 import React from "react";
 import { format } from "date-fns";
+import Link from "next/link";
 
 const Header = ({ image, name, date, partySize }: { image: string; name: string; date: string; partySize: string }) => {
   const [day, time] = date.split("T");
 
   return (
-    <div className="flex w-[95%] items-center m-3 bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+    <Link href="/" className="flex w-[95%] items-center m-3 bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
       <div className="w-3/5">
         <img className="rounded-l-lg object-cover h-60 w-full" src={image} alt="" />
       </div>
@@ -19,7 +20,7 @@ const Header = ({ image, name, date, partySize }: { image: string; name: string;
           <p className="mr-6">{partySize} people</p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

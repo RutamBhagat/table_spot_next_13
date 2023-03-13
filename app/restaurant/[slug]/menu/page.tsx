@@ -1,12 +1,11 @@
 import React from "react";
 import RestaurantNavbar from "../components/RestaurantNavbar";
 import Menu from "../components/Menu";
-import { PrismaClient, Review } from "@prisma/client";
+import { Review } from "@prisma/client";
 import ErrorComponent from "../components/ErrorComponent";
 import Header from "../components/Header";
 import ReservationCard from "../components/ReservationCard";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 export type RestaurantBySlugType = {
   id: number;

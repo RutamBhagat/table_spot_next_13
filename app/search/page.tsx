@@ -3,9 +3,9 @@ import Header from "./components/Header";
 import RestaurantCard from "./components/RestaurantCard";
 import SearchSideBar from "./components/SearchSideBar";
 import ErrorComponent from "../restaurant/[slug]/components/ErrorComponent";
-import { PrismaClient, type Review, type Cuisine, type Location, type PRICE } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { type Review, type Cuisine, type Location, type PRICE } from "@prisma/client";
+import shortid from "shortid";
+import { prisma } from "@/lib/prisma";
 
 export type searchParamsType = {
   city: string;
@@ -98,7 +98,7 @@ const Search = async ({ searchParams }: { searchParams: { city: string; cuisine:
             <ErrorComponent message={"No restaurants found !!!"} />
           ) : (
             restaurants.map((restaurant) => {
-              return <RestaurantCard restaurant={restaurant} />;
+              return <RestaurantCard key={shortid.generate()} restaurant={restaurant} />;
             })
           )}
         </div>

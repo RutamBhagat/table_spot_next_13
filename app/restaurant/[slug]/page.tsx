@@ -1,4 +1,4 @@
-import { PrismaClient, type Review } from "@prisma/client";
+import { type Review } from "@prisma/client";
 import React from "react";
 import ErrorComponent from "./components/ErrorComponent";
 import Header from "./components/Header";
@@ -7,8 +7,7 @@ import Rating from "./components/Rating";
 import ReservationCard from "./components/ReservationCard";
 import RestaurantNavbar from "./components/RestaurantNavbar";
 import Reviews from "./components/Reviews";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 export type RestaurantBySlugType = {
   id: number;

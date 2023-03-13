@@ -3,6 +3,7 @@ import ErrorComponent from "@/app/restaurant/[slug]/components/ErrorComponent";
 import useReservation from "@/hooks/useReservation";
 import React, { type ChangeEvent, type FormEvent, useEffect, useState, useContext } from "react";
 import { AuthenticationContext } from "@/app/context/AuthContext";
+import Link from "next/link";
 
 const defaultFormFields = {
   bookerFirstName: "",
@@ -17,9 +18,9 @@ const Form = ({ slug, date, partySize }: { slug: string; date: string; partySize
   const [input, setInput] = useState(defaultFormFields);
   const [isDisabled, setIsDisabled] = useState(true);
   const [didBook, setDidBook] = useState(false);
-  const [day, time] = date.split("T");
   const { loading, error, createReservation } = useReservation();
   const { data } = useContext(AuthenticationContext);
+  const [day, time] = date.split("T");
 
   useEffect(() => {
     setInput((prev) => {
@@ -33,8 +34,8 @@ const Form = ({ slug, date, partySize }: { slug: string; date: string; partySize
         };
       }
       return prev;
-    })
-  }, [data])
+    });
+  }, [data]);
 
   useEffect(() => {
     if (input.bookerFirstName && input.bookerLastName && input.bookerPhone && input.bookerEmail) {
@@ -64,7 +65,7 @@ const Form = ({ slug, date, partySize }: { slug: string; date: string; partySize
     <>
       {didBook ? (
         //Note this is not an error i am just too lazy to make a new component
-        <ErrorComponent message="You are all booked up, Enjoy your reservation" />
+        <ErrorComponent message="You are all booked up, Enjoy your reservation. Click on restaurant card to go back to homepage" />
       ) : (
         <form className="mt-10 max-w-xl" onSubmit={handleSubmit}>
           <div className="relative z-0 w-full mb-6 group">
@@ -147,7 +148,6 @@ const Form = ({ slug, date, partySize }: { slug: string; date: string; partySize
                 type="text"
                 placeholder=" "
                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                required
               />
               <label
                 htmlFor="bookerOccasion"
@@ -164,7 +164,6 @@ const Form = ({ slug, date, partySize }: { slug: string; date: string; partySize
                 type="text"
                 placeholder=" "
                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                required
               />
               <label
                 htmlFor="bookerRequest"

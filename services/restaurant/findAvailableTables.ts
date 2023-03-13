@@ -1,8 +1,7 @@
 import { times } from "@/data";
-import { PrismaClient, type Table } from "@prisma/client";
+import { type Table } from "@prisma/client";
 import { NextApiResponse } from "next";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 export const findAvailableTables = async ({
   res,

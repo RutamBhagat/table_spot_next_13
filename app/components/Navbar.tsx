@@ -26,7 +26,9 @@ const Navbar = () => {
         </Link>
         <div className="flex md:order-2">
           <div>
-            {loading ? null : (
+            {loading ? (
+              <span></span>
+            ) : (
               <div className="flex">
                 {data ? (
                   <button
