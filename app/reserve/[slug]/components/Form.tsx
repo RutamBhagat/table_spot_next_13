@@ -1,6 +1,8 @@
 "use client";
+import ErrorComponent from "@/app/restaurant/[slug]/components/ErrorComponent";
 import useReservation from "@/hooks/useReservation";
-import React, { type ChangeEvent, type FormEvent, useEffect, useState } from "react";
+import React, { type ChangeEvent, type FormEvent, useEffect, useState, useContext } from "react";
+import { AuthenticationContext } from "@/app/context/AuthContext";
 
 const defaultFormFields = {
   bookerFirstName: "",
@@ -17,6 +19,22 @@ const Form = ({ slug, date, partySize }: { slug: string; date: string; partySize
   const [didBook, setDidBook] = useState(false);
   const [day, time] = date.split("T");
   const { loading, error, createReservation } = useReservation();
+  const { data } = useContext(AuthenticationContext);
+
+  useEffect(() => {
+    setInput((prev) => {
+      if (data) {
+        return {
+          ...prev,
+          bookerFirstName: data.firstName,
+          bookerLastName: data.lastName,
+          bookerPhone: data.phone,
+          bookerEmail: data.email,
+        };
+      }
+      return prev;
+    })
+  }, [data])
 
   useEffect(() => {
     if (input.bookerFirstName && input.bookerLastName && input.bookerPhone && input.bookerEmail) {
@@ -45,64 +63,121 @@ const Form = ({ slug, date, partySize }: { slug: string; date: string; partySize
   return (
     <>
       {didBook ? (
-        <div>
-          <h1>You are all booked up</h1>
-          <p>Enjoy your reservation</p>
-        </div>
+        //Note this is not an error i am just too lazy to make a new component
+        <ErrorComponent message="You are all booked up, Enjoy your reservation" />
       ) : (
-        <form onSubmit={handleSubmit} className="mt-10 flex flex-wrap justify-between w-[660px]">
-          <input
-            onChange={handleChange}
-            name="bookerFirstName"
-            value={input.bookerFirstName}
-            type="text"
-            className="border rounded p-3 w-80 mb-4"
-            placeholder="First name"
-          />
-          <input
-            onChange={handleChange}
-            name="bookerLastName"
-            value={input.bookerLastName}
-            type="text"
-            className="border rounded p-3 w-80 mb-4"
-            placeholder="Last name"
-          />
-          <input
-            onChange={handleChange}
-            name="bookerPhone"
-            value={input.bookerPhone}
-            type="text"
-            className="border rounded p-3 w-80 mb-4"
-            placeholder="Phone number"
-          />
-          <input
-            onChange={handleChange}
-            name="bookerEmail"
-            value={input.bookerEmail}
-            type="text"
-            className="border rounded p-3 w-80 mb-4"
-            placeholder="Email"
-          />
-          <input
-            onChange={handleChange}
-            name="bookerOccasion"
-            value={input.bookerOccasion}
-            type="text"
-            className="border rounded p-3 w-80 mb-4"
-            placeholder="Occasion (optional)"
-          />
-          <input
-            onChange={handleChange}
-            name="bookerRequest"
-            value={input.bookerRequest}
-            type="text"
-            className="border rounded p-3 w-80 mb-4"
-            placeholder="Requests (optional)"
-          />
+        <form className="mt-10 max-w-xl" onSubmit={handleSubmit}>
+          <div className="relative z-0 w-full mb-6 group">
+            <input
+              onChange={handleChange}
+              name="bookerEmail"
+              value={input.bookerEmail}
+              type="text"
+              placeholder=" "
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              required
+            />
+            <label
+              htmlFor="email"
+              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+            >
+              Email address
+            </label>
+          </div>
+          <div className="relative z-0 w-full mb-6 group">
+            <input
+              onChange={handleChange}
+              name="bookerPhone"
+              value={input.bookerPhone}
+              type="tel"
+              pattern="[0-9]{10}"
+              placeholder=" "
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              required
+            />
+            <label
+              htmlFor="bookerPhone"
+              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+            >
+              Phone (10-digit)
+            </label>
+          </div>
+          <div className="grid md:grid-cols-2 md:gap-6">
+            <div className="relative z-0 w-full mb-6 group">
+              <input
+                onChange={handleChange}
+                name="bookerFirstName"
+                value={input.bookerFirstName}
+                type="text"
+                placeholder=" "
+                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                required
+              />
+              <label
+                htmlFor="firstName"
+                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              >
+                First name
+              </label>
+            </div>
+            <div className="relative z-0 w-full mb-6 group">
+              <input
+                onChange={handleChange}
+                name="bookerLastName"
+                value={input.bookerLastName}
+                type="text"
+                placeholder=" "
+                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                required
+              />
+              <label
+                htmlFor="lastName"
+                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              >
+                Last name
+              </label>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 md:gap-6">
+            <div className="relative z-0 w-full mb-6 group">
+              <input
+                onChange={handleChange}
+                name="bookerOccasion"
+                value={input.bookerOccasion}
+                type="text"
+                placeholder=" "
+                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                required
+              />
+              <label
+                htmlFor="bookerOccasion"
+                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              >
+                Occasion (optional)
+              </label>
+            </div>
+            <div className="relative z-0 w-full mb-6 group">
+              <input
+                onChange={handleChange}
+                name="bookerRequest"
+                value={input.bookerRequest}
+                type="text"
+                placeholder=" "
+                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                required
+              />
+              <label
+                htmlFor="bookerRequest"
+                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              >
+                Requests (optional)
+              </label>
+            </div>
+          </div>
           <button
             type="submit"
             disabled={isDisabled || loading}
-            className="bg-red-600 w-full p-3 text-white font-bold rounded disabled:bg-gray-300"
+            className="bg-blue-600 w-full p-3 text-white font-bold rounded disabled:bg-gray-400"
           >
             {loading ? (
               <div className="flex justify-center items-center" role="status">
@@ -128,10 +203,12 @@ const Form = ({ slug, date, partySize }: { slug: string; date: string; partySize
               "Complete reservation"
             )}
           </button>
-          <p className="mt-4 text-sm">
-            By clicking “Complete reservation” you agree to the OpenTable Terms of Use and Privacy Policy. Standard text
-            message rates may apply. You may opt out of receiving text messages at any time.
-          </p>
+          <div className="text-sm font-medium mt-5 text-gray-500 dark:text-gray-300">
+            By clicking
+            <span className="text-blue-700 hover:underline dark:text-blue-500"> “Complete reservation”</span> you agree
+            to the TableSpot's Terms of Use and Privacy Policy. Standard text message rates may apply. You may opt out
+            of receiving text messages at any time.
+          </div>
         </form>
       )}
     </>

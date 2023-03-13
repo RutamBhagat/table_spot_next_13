@@ -96,7 +96,7 @@ const ReservationCard = ({ open_time, close_time, slug }: { open_time: string; c
         <button
           onClick={handleClick}
           disabled={loading}
-          className="bg-red-600 rounded w-full px-4 text-white font-bold h-16"
+          className="bg-blue-700 hover:bg-blue-800 rounded w-full px-4 text-white font-bold h-16"
         >
           {loading ? (
             <div className="flex justify-center items-center" role="status">
@@ -131,12 +131,12 @@ const ReservationCard = ({ open_time, close_time, slug }: { open_time: string; c
               inst.available ? (
                 <Link
                   href={`/reserve/${slug}?date=${day}T${inst.time}&partySize=${partySize}`}
-                  className="bg-red-600 cursor-pointer p-2 text-center text-white mb-3 rounded mr-3 w-24"
+                  className="bg-blue-700 hover:bg-blue-800 cursor-pointer p-2 text-center text-white mb-3 rounded mr-3 w-24"
                 >
                   <p className="text-sm font-bold">{convertToDisplayTime(inst.time)}</p>
                 </Link>
               ) : (
-                <div className="bg-gray-400 p-2 text-center text-white mb-3 rounded mr-3 w-24"></div>
+                <div className="bg-gray-400 p-2 text-center text-white mb-3 rounded mr-3 w-24">Unavailable</div>
               )
             )}
           </div>

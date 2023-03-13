@@ -13,9 +13,9 @@ const SearchSideBar = ({
   searchParams: searchParamsType;
 }) => {
   return (
-    <div className="w-1/5 p-3">
+    <div className="w-full p-3 mt-3 bg-[#dee3ea] rounded-lg">
       <div className="border-b pb-4">
-        <h1 className="mb-2">Region</h1>
+        <h1 className="mb-2 font-semibold">Region</h1>
         {locations.map((inst) => {
           return (
             <div>
@@ -39,7 +39,7 @@ const SearchSideBar = ({
         })}
       </div>
       <div className="border-b pb-4 mt-3">
-        <h1 className="mb-2">Cuisine</h1>
+        <h1 className="mb-2 font-semibold">Cuisine</h1>
         {cuisines.map((inst) => {
           return (
             <div>
@@ -63,7 +63,7 @@ const SearchSideBar = ({
         })}
       </div>
       <div className="mt-3 pb-4">
-        <h1 className="mb-2">Price</h1>
+        <h1 className="mb-2 font-semibold">Price</h1>
         <div className="flex">
           <Link
             href={{

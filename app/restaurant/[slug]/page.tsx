@@ -48,18 +48,20 @@ const ID = async ({ params }: { params: { slug: string } }) => {
   }
 
   return (
-    <div className="">
+    <div className="pb-20">
       {restaurant && <Header name={params.slug} />}
       <div className="flex m-auto w-2/3 justify-between items-start 0 -mt-11">
-        <div className="bg-white w-[90%] rounded p-3 shadow">
+        <div className="bg-white w-[90%] rounded p-3 shadow px-5">
           <RestaurantNavbar slug={params.slug} />
-          <div className="mt-4 border-b pb-6">
-            <h1 className="font-bold text-6xl">{restaurant.name}</h1>
+          <div className="flex justify-between items-center">
+            <h1 className="my-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+              {restaurant.name}
+            </h1>
+            <Rating reviews={restaurant.reviews} />
           </div>
-          <Rating reviews={restaurant.reviews} />
-          <div className="mt-4">
-            <p className="text-lg font-light">{restaurant.description}</p>
-          </div>
+          <p className="mb-6 text-lg text-start font-normal text-gray-500 lg:text-xl dark:text-gray-400">
+            {restaurant.description}
+          </p>
           <Images images={restaurant.images} />
           <Reviews reviews={restaurant.reviews} />
         </div>

@@ -11,22 +11,24 @@ const RestaurantCard = ({ restaurant }: { restaurant: SearchRestaurantType }) =>
   const averageRestaurantRating = parseFloat((totalRestaurantRating / restaurant.reviews.length || 0).toFixed(1));
 
   return (
-    <div className="border-b flex pb-5">
-      <img src={restaurant.main_image} alt="" className="w-44 rounded" />
-      <div className="pl-5">
-        <h2 className="text-3xl">{restaurant.name}</h2>
-        <div className="flex items-center">
+    <div className="flex w-[95%] items-center m-3 bg-[#dee3ea] border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+      <div className="w-3/5">
+        <img className="rounded-l-lg object-cover h-60 w-full" src={restaurant.main_image} alt="" />
+      </div>
+      <div className="flex w-2/5 flex-col justify-between p-4 leading-normal">
+        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{restaurant.name}</h5>
+        <div className="flex justify-between text-reg font-light capitalize mb-2">
+          <p className="text-center">Cuisine {restaurant.cuisine.name}</p>
+          <div className="flex justify-center items-center">
+            <PriceComponent price={restaurant.price} />
+          </div>
+          <p className="text-center">Location {restaurant.location.name}</p>
+        </div>
+        <div className="flex items-start mb-9">
           <StarsComponent stars={averageRestaurantRating} />
           <p className="ml-2 text-sm">
             {averageRestaurantRating >= 4.5 ? "Awesome" : averageRestaurantRating != 0 ? "Good" : "Not Rated"}
           </p>
-        </div>
-        <div className="mb-9">
-          <div className="font-light flex text-reg">
-            <PriceComponent price={restaurant.price} />
-            <p className="mr-4 capitalize">{restaurant.location.name}</p>
-            <p className="mr-4 capitalize">{restaurant.cuisine.name}</p>
-          </div>
         </div>
         <div className="text-red-600">
           <Link href={`/restaurant/${restaurant.slug}`}>View more information</Link>

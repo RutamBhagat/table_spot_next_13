@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, createContext, useEffect } from "react";
-import useAuth from "@/hooks/useAuth";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 

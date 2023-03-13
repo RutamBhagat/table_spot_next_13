@@ -3,7 +3,7 @@ import React from "react";
 
 const Header = () => {
   return (
-    <div className="bg-gradient-to-r to-[#5f6984] from-[#0f1f47] p-2">
+    <div className="bg-gradient-to-t from-[#0a081a] to-[#1c1649] p-2">
       <SearchBar />
     </div>
   );

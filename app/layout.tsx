@@ -13,9 +13,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       */}
       <head />
       <body>
-        <main className="bg-gray-100 min-h-screen w-screen">
+        <main className="bg-[#0a081a] min-h-screen w-screen">
           <AuthContext>
-            <main className="max-w-screen-2xl m-auto bg-white">
+            <main className="max-w-screen-2xl m-auto bg-[#0a081a]">
               <Navbar />
               {children}
             </main>

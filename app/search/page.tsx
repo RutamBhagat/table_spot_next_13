@@ -93,8 +93,7 @@ const Search = async ({ searchParams }: { searchParams: { city: string; cuisine:
     <>
       <Header />
       <div className="flex py-4 m-auto w-2/3 justify-between items-start">
-        <SearchSideBar locations={locations} cuisines={cuisines} searchParams={searchParams} />
-        <div className="w-5/6">
+        <div className="w-4/5">
           {!restaurants.length ? (
             <ErrorComponent message={"No restaurants found !!!"} />
           ) : (
@@ -102,6 +101,9 @@ const Search = async ({ searchParams }: { searchParams: { city: string; cuisine:
               return <RestaurantCard restaurant={restaurant} />;
             })
           )}
+        </div>
+        <div className="w-1/5">
+          <SearchSideBar locations={locations} cuisines={cuisines} searchParams={searchParams} />
         </div>
       </div>
     </>

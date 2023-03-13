@@ -38,10 +38,17 @@ const Slug = async ({
   const restaurant = await fetchRestaurantsBySlug(params.slug);
 
   return (
-    <div className="border-t h-screen">
-      <div className="py-9 w-3/5 m-auto">
-        <Header image={restaurant.main_image} name={restaurant.name} date={searchParams.date} partySize={searchParams.partySize} />
-        <Form slug={params.slug} date={searchParams.date} partySize={searchParams.partySize} />
+    <div className="min-h-screen py-10">
+      <div className="p-8 py-10 w-3/5 m-auto rounded-lg bg-[#dee3ea]">
+        <Header
+          image={restaurant.main_image}
+          name={restaurant.name}
+          date={searchParams.date}
+          partySize={searchParams.partySize}
+        />
+        <div className="flex justify-center items-center">
+          <Form slug={params.slug} date={searchParams.date} partySize={searchParams.partySize} />
+        </div>
       </div>
     </div>
   );
