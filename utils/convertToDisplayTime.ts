@@ -1,3 +1,4 @@
+// object to convert universal time to regular time
 const displayTimeObject = {
     "00:00:00.000Z": "12:00 AM",
     "00:30:00.000Z": "12:30 AM",

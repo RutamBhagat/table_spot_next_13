@@ -1,6 +1,6 @@
 "use client";
 import useAuth from "@/hooks/useAuth";
-import React, { ChangeEvent, FormEvent, useEffect, useState, useContext } from "react";
+import React, { type ChangeEvent, type FormEvent, useEffect, useState, useContext } from "react";
 import { AuthenticationContext } from "../context/AuthContext";
 
 const defaultFormFields = {
