@@ -6,10 +6,11 @@ import * as jose from "jose";
 import { setCookie } from "cookies-next";
 import { prisma } from "@/lib/prisma";
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     const { email, password } = req.body;
+
+    // Data validation
     const validationSchema = [
       {
         valid: validator.isEmail(email),
@@ -21,30 +22,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     ];
 
-    validationSchema.forEach((check) => {
-      if (!check.valid) {
-        res.status(400).json({ errorMessage: check.errorMessage });
-        return;
+    validationSchema.forEach((inst) => {
+      if (!inst.valid) {
+        return res.status(400).json({ errorMessage: inst.errorMessage });
       }
     });
 
+    // Check if user exists and check user credentials
     const user = await prisma.user.findUnique({
       where: {
         email: email,
       },
     });
+
     if (!user) {
-      res.status(400).json({ errorMessage: "Invalid email or password" });
-      return;
+      return res.status(400).json({ errorMessage: "Invalid email or password" });
     }
 
     const isMatchingPassword = await bcrypt.compare(password, user.password);
 
     if (!isMatchingPassword) {
-      res.status(400).json({ errorMessage: "Invalid email or password" });
-      return;
+      return res.status(400).json({ errorMessage: "Invalid email or password" });
     }
 
+    // Token creation using jose library
     const algo = "HS256";
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
@@ -53,18 +54,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .setExpirationTime("24h")
       .sign(secret);
 
-    //cookie will expire in 6 days
+    // Set the cookie in the browser, this cookie will expire in 6 days
     setCookie("jwt", token, { req, res, maxAge: 24 * 60 * 60 * 6 });
 
-    return res
-      .status(200)
-      .json({
-        firstName: user.first_name,
-        lastName: user.last_name,
-        email: user.email,
-        phone: user.phone,
-        city: user.city,
-      });
+    return res.status(200).json({
+      firstName: user.first_name,
+      lastName: user.last_name,
+      email: user.email,
+      phone: user.phone,
+      city: user.city,
+    });
   } else {
     return res.status(405).json({ errorMessage: "Method not allowed" });
   }

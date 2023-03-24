@@ -1,11 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import { partySize as partySizes, times } from "@/data";
+import Link from "next/link";
 import shortid from "shortid";
 import DatePicker from "react-datepicker";
 import useAvailabilities from "@/hooks/useAvailabilities";
-import Link from "next/link";
 import { convertToDisplayTime } from "@/utils/convertToDisplayTime";
+import { partySize as partySizes, times } from "@/data";
+//renamed partySize since it was conflicting with the useState defined below
+//you dont need to specify @data/index.tsx since it automatically looks for that file in the data folder
 
 const ReservationCard = ({ open_time, close_time, slug }: { open_time: string; close_time: string; slug: string }) => {
   const { loading, error, data, fetchAvailabilities } = useAvailabilities();
@@ -19,7 +21,8 @@ const ReservationCard = ({ open_time, close_time, slug }: { open_time: string; c
     if (time.time === open_time) {
       isWithinTimeWindow = true;
     } else if (time.time === close_time) {
-      isWithinTimeWindow = false; 
+      isWithinTimeWindow = false;
+      return true; 
     }
     return isWithinTimeWindow;
   });
@@ -129,14 +132,17 @@ const ReservationCard = ({ open_time, close_time, slug }: { open_time: string; c
           <div className="flex flex-wrap mt-2">
             {data.map((inst) =>
               inst.available ? (
-                <Link key={shortid.generate()}
+                <Link
+                  key={shortid.generate()}
                   href={`/reserve/${slug}?date=${day}T${inst.time}&partySize=${partySize}&slug=${slug}`}
                   className="bg-blue-700 hover:bg-blue-800 cursor-pointer p-2 text-center text-white mb-3 rounded mr-3 w-24"
                 >
                   <p className="text-sm font-bold">{convertToDisplayTime(inst.time)}</p>
                 </Link>
               ) : (
-                <div key={shortid.generate()} className="bg-gray-400 p-2 text-center text-white mb-3 rounded mr-3 w-24">Unavailable</div>
+                <div key={shortid.generate()} className="bg-gray-400 p-2 text-center text-white mb-3 rounded mr-3 w-24">
+                  Unavailable
+                </div>
               )
             )}
           </div>

@@ -6,10 +6,11 @@ import * as jose from "jose";
 import { setCookie } from "cookies-next";
 import { prisma } from "@/lib/prisma";
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     const { firstName, lastName, email, password, phone, city } = req.body;
+
+    // Data validation
     const validationSchema = [
       {
         valid: validator.isLength(firstName, { min: 1, max: 20 }),
@@ -44,19 +45,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     });
 
+    // Check if user exists
     const userByEmail = await prisma.user.findUnique({
       where: {
         email: email,
       },
     });
+    // Send error if user exists
     if (userByEmail) {
-      res.status(400).json({ errorMessage: "Email already exists" });
+      res.status(400).json({ errorMessage: "Email already exists, please sign in" });
       return;
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     //create user in db using prisma client
+    //Note try upsert instead of create next time
     const user = await prisma.user.create({
       data: {
         first_name: firstName,
@@ -68,16 +72,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
+    // Token creation using jose library
     const algo = "HS256";
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
-    //Token creation
     const token = await new jose.SignJWT({ email: email })
       .setProtectedHeader({ alg: algo })
       .setExpirationTime("24h")
       .sign(secret);
 
-    //cookie will expire in 6 days
+    // Set the cookie in the browser, this cookie will expire in 6 days
     setCookie("jwt", token, { req, res, maxAge: 24 * 60 * 60 * 6 });
 
     return res.status(200).json({

@@ -93,7 +93,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let seatsRemaining = parseInt(partySize);
 
     while (seatsRemaining > 0) {
-      if (seatsRemaining >= 3) {
+      if (seatsRemaining > 2) {
         if (tablesCount[4].length) {
           tablesToBook.push(tablesCount[4][0]);
           tablesCount[4].shift();

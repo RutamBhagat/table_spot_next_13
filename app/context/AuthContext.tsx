@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, createContext, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 
@@ -12,15 +12,16 @@ type User = {
   phone: string;
 };
 
-interface State {
+type State = {
   loading: boolean;
   data: User | null;
   error: string | null;
-}
+};
 
-interface AuthenticationContextType extends State {
+//this extends the State type with the setAuthState function
+type AuthenticationContextType = State & {
   setAuthState: React.Dispatch<React.SetStateAction<State>>;
-}
+};
 
 export const AuthenticationContext = createContext<AuthenticationContextType>({
   loading: false,
@@ -42,6 +43,7 @@ export default function AuthContext({ children }: { children: React.ReactNode })
       data: null,
       error: null,
     });
+
     try {
       const jwt = getCookie("jwt");
       if (!jwt) {
@@ -59,6 +61,8 @@ export default function AuthContext({ children }: { children: React.ReactNode })
         },
       });
 
+      //This will grab the json web token and append it to the header of every request
+      //such that you wont have to do it manually in every request like above
       axios.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
 
       setAuthState({

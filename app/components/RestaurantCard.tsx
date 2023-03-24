@@ -28,7 +28,7 @@ const RestaurantCard = ({ restaurant }: { restaurant: RestaurantCardType }) => {
           <p className="text-center">Location {restaurant.location.name}</p>
         </div>
         <div className="flex justify-between py-2">
-          <p className="text-sm mt-1 font-bold">Booked 3 times today</p>
+          <p className="text-sm mt-1 font-bold">Booked 0 times today</p>
           <div className="flex items-start">
             <StarsComponent stars={averageRestaurantRating} />
             <p className="ml-2">{restaurant.reviews.length} reviews</p>

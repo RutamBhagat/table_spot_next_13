@@ -5,8 +5,9 @@ import { prisma } from "@/lib/prisma";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
+    //Destructuring token from header
     const bearerToken = req.headers.authorization as string;
-    const token = bearerToken?.split(" ")[1];
+    const token = bearerToken.split(" ")[1];
 
     //Token decoding and extracting email from it
     const payload = jwt.decode(token) as { email: string };

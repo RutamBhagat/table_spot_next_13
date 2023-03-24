@@ -8,13 +8,15 @@ type Data = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+  await prisma.bookingsOnTables.deleteMany(); 
+  await prisma.booking.deleteMany(); 
   await prisma.table.deleteMany(); 
-  await prisma.review.deleteMany();
   await prisma.item.deleteMany();
-  await prisma.restaurant.deleteMany();
   await prisma.location.deleteMany();
   await prisma.cuisine.deleteMany();
+  await prisma.review.deleteMany();
   await prisma.user.deleteMany();
+  await prisma.restaurant.deleteMany();
 
   await prisma.location.createMany({
     data: [{ name: "ottawa" }, { name: "toronto" }, { name: "niagara" }],
