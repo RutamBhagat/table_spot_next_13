@@ -8,9 +8,9 @@ type Data = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-  await prisma.bookingsOnTables.deleteMany(); 
-  await prisma.booking.deleteMany(); 
-  await prisma.table.deleteMany(); 
+  await prisma.bookingsOnTables.deleteMany();
+  await prisma.booking.deleteMany();
+  await prisma.table.deleteMany();
   await prisma.item.deleteMany();
   await prisma.location.deleteMany();
   await prisma.cuisine.deleteMany();
@@ -1205,22 +1205,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     ],
   });
 
-  await prisma.table.createMany({
-    data: [
-      {
-        restaurant_id: vivaanId,
-        seats: 4,
-      },
-      {
-        restaurant_id: vivaanId,
-        seats: 4,
-      },
-      {
-        restaurant_id: vivaanId,
-        seats: 2,
-      },
-    ],
-  });
+  for (let inst of restaurants) {
+    await prisma.table.createMany({
+      data: [
+        {
+          restaurant_id: inst.id,
+          seats: 4,
+        },
+        {
+          restaurant_id: inst.id,
+          seats: 4,
+        },
+        {
+          restaurant_id: inst.id,
+          seats: 2,
+        },
+      ],
+    });
+  }
 
   res.status(200).json({ seed: "successful" });
 }

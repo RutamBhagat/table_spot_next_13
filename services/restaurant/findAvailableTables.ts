@@ -46,7 +46,7 @@ export const findAvailableTables = async ({
 
   // Loop through each booking
   for (let inst of bookings) {
-    // Create an object for each table booked
+    // Create an object for each table booked~
     const tableIdObj = inst.tables.reduce((acc, table) => {
       return {
         ...acc,

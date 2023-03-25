@@ -21,18 +21,15 @@ export default function useAvailabilities() {
     setLoading(true);
 
     try {
-      const response = await axios.get(`/api/restaurant/${slug}/availability`, {
-        params: {
-          day: day,
-          time: time,
-          partySize: partySize,
-        },
-      });
+      const response = await fetch(
+        `/api/restaurant/${slug}/availability?day=${day}&time=${time}&partySize=${partySize}`, { cache: 'no-store' }
+      );
       setLoading(false);
-      setData(response.data);
+      setData(await response.json());
     } catch (error: any) {
       setLoading(false);
       setError(error.response.data.errorMessage);
+      console.log("error", error);
     }
   };
 
