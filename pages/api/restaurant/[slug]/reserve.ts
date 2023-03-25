@@ -1,67 +1,58 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next";
+import { PrismaClient } from "@prisma/client";
+import { NextApiRequest, NextApiResponse } from "next";
 import { findAvailableTables } from "@/services/restaurant/findAvailableTables";
-import validator from "validator";
-import { prisma } from "@/lib/prisma";
+
+const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
-    const { slug, partySize, day, time } = req.query as { slug: string; partySize: string; day: string; time: string };
+    const { slug, day, time, partySize } = req.query as {
+      slug: string;
+      day: string;
+      time: string;
+      partySize: string;
+    };
 
-    const { bookerFirstName, bookerLastName, bookerEmail, bookerPhone, bookerOccasion, bookerRequest } = req.body;
-    const validationSchema = [
-      {
-        valid: validator.isLength(bookerFirstName, { min: 1, max: 20 }),
-        errorMessage: "Booker First name must be between 1 and 20 characters",
-      },
-      {
-        valid: validator.isLength(bookerLastName, { min: 1, max: 20 }),
-        errorMessage: "Booker Last name must be between 1 and 20 characters",
-      },
-      {
-        valid: validator.isEmail(bookerEmail),
-        errorMessage: "Booker Email is not valid",
-      },
-      {
-        valid: validator.isMobilePhone(bookerPhone),
-        errorMessage: "Booker Phone is not valid",
-      },
-    ];
-
-    validationSchema.forEach((check) => {
-      if (!check.valid) {
-        res.status(400).json({ errorMessage: check.errorMessage });
-        return;
-      }
-    });
+    const { bookerEmail, bookerPhone, bookerFirstName, bookerLastName, bookerOccasion, bookerRequest } = req.body;
 
     const restaurant = await prisma.restaurant.findUnique({
       where: {
-        slug: slug,
+        slug,
       },
       select: {
-        id: true,
         tables: true,
         open_time: true,
         close_time: true,
+        id: true,
       },
     });
 
     if (!restaurant) {
-      return res.status(404).json({ errorMessage: "Restaurant not found" });
+      return res.status(400).json({
+        errorMessage: "Restaurant not found",
+      });
     }
 
     if (
       new Date(`${day}T${time}`) < new Date(`${day}T${restaurant.open_time}`) ||
       new Date(`${day}T${time}`) > new Date(`${day}T${restaurant.close_time}`)
     ) {
-      return res.status(400).json({ errorMessage: "Restaurant is not open at that time" });
+      return res.status(400).json({
+        errorMessage: "Restaurant is not open at that time",
+      });
     }
 
-    const searchTimesWithTables = await findAvailableTables({ day, time, res, restaurant });
+    const searchTimesWithTables = await findAvailableTables({
+      day,
+      time,
+      res,
+      restaurant,
+    });
 
     if (!searchTimesWithTables) {
-      return res.status(404).json({ errorMessage: "Invalid data provided" });
+      return res.status(400).json({
+        errorMessage: "Invalid data provided",
+      });
     }
 
     const searchTimeWithTables = searchTimesWithTables.find((inst) => {
@@ -69,10 +60,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     if (!searchTimeWithTables) {
-      return res.status(404).json({ errorMessage: "No availability, cannot book" });
+      return res.status(400).json({
+        errorMessage: "No availablity, cannot book",
+      });
     }
 
-    // declare an object to hold the number of available tables for each seat size
+    // Create an object with two empty arrays for 2 seat and 4 seat tables
     const tablesCount: {
       2: number[];
       4: number[];
@@ -81,48 +74,49 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       4: [],
     };
 
-    // loop through the available tables and add the id to the appropriate array in `tablesCount`
-    for (let inst of searchTimeWithTables.tables) {
+    // Iterate over all tables in the searchTimeWithTables object
+    for(let inst of searchTimeWithTables.tables){
+      // If the table has 2 seats, add its id to the 2 seat array
       if (inst.seats === 2) {
         tablesCount[2].push(inst.id);
+      // If the table has 4 seats, add its id to the 4 seat array
       } else {
         tablesCount[4].push(inst.id);
       }
     }
 
-    // declare an array to hold the table ids we will book
-    const tablesToBook: number[] = [];
-
-    // set the number of seats remaining to be booked to the total party size
+    // Create an empty array to store the ids of the tables we will book
+    const tablesToBooks: number[] = [];
+    // Create a variable to store the number of seats remaining to be booked
     let seatsRemaining = parseInt(partySize);
 
-    // loop through the available tables and add them to the tablesToBook array
+    // Loop until all seats have been booked
     while (seatsRemaining > 0) {
-      // if there are more than 2 seats remaining to be booked, check if there are any 4 seat tables available
-      if (seatsRemaining > 2) {
+      // If there are more than 2 seats remaining, try and book a 4 seat table
+      if (seatsRemaining >= 3) {
+        // If there are any 4 seat tables left, book the first one
         if (tablesCount[4].length) {
-          // if there are 4 seat tables available, book the first one and reduce the number of seats remaining to be booked by 4
-          tablesToBook.push(tablesCount[4][0]);
+          tablesToBooks.push(tablesCount[4][0]);
           tablesCount[4].shift();
-          seatsRemaining -= 4;
+          seatsRemaining = seatsRemaining - 4;
+        // Otherwise, book a 2 seat table
         } else {
-          // if there are no 4 seat tables available, book the first 2 seat table and reduce the number of seats remaining to be booked by 2
-          tablesToBook.push(tablesCount[2][0]);
+          tablesToBooks.push(tablesCount[2][0]);
           tablesCount[2].shift();
-          seatsRemaining -= 2;
+          seatsRemaining = seatsRemaining - 2;
         }
+      // If there are only 2 seats remaining, try and book a 2 seat table
       } else {
-        // if there are 2 or fewer seats remaining to be booked, check if there are any 2 seat tables available
+        // If there are any 2 seat tables left, book the first one
         if (tablesCount[2].length) {
-          // if there are 2 seat tables available, book the first one and reduce the number of seats remaining to be booked by 2
-          tablesToBook.push(tablesCount[2][0]);
+          tablesToBooks.push(tablesCount[2][0]);
           tablesCount[2].shift();
-          seatsRemaining -= 2;
+          seatsRemaining = seatsRemaining - 2;
+        // Otherwise, book a 4 seat table
         } else {
-          // if there are no 2 seat tables available, book the first 4 seat table and reduce the number of seats remaining to be booked by 4
-          tablesToBook.push(tablesCount[4][0]);
+          tablesToBooks.push(tablesCount[4][0]);
           tablesCount[4].shift();
-          seatsRemaining -= 4;
+          seatsRemaining = seatsRemaining - 4;
         }
       }
     }
@@ -141,9 +135,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    const bookingsOnTablesData = tablesToBook.map((tableId) => {
+    const bookingsOnTablesData = tablesToBooks.map((table_id) => {
       return {
-        table_id: tableId,
+        table_id,
         booking_id: booking.id,
       };
     });
@@ -152,7 +146,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       data: bookingsOnTablesData,
     });
 
-    return res.status(200).json(booking);
+    return res.json(booking);
   } else {
     res.status(400).json({ errorMessage: "Method not allowed" });
   }

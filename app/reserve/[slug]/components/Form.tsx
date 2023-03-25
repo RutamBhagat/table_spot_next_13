@@ -65,7 +65,7 @@ const Form = ({ slug, date, partySize }: { slug: string; date: string; partySize
     <>
       {didBook ? (
         //Note this is not an error i am just too lazy to make a new component
-        <ErrorComponent message="You are all booked up, Enjoy your reservation. Click on restaurant card to go back to homepage" />
+        <ErrorComponent message="You are all booked up, Enjoy your reservation. Click on restaurant card to go back." />
       ) : (
         <form className="mt-10 max-w-xl" onSubmit={handleSubmit}>
           <div className="relative z-0 w-full mb-6 group">
