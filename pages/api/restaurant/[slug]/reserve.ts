@@ -4,7 +4,6 @@ import { findAvailableTables } from "@/services/restaurant/findAvailableTables";
 import validator from "validator";
 import { prisma } from "@/lib/prisma";
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     const { slug, partySize, day, time } = req.query as { slug: string; partySize: string; day: string; time: string };
@@ -65,14 +64,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(404).json({ errorMessage: "Invalid data provided" });
     }
 
-    const searchTimeWithTables = searchTimesWithTables.find((t) => {
-      return t.date.toISOString() === new Date(`${day}T${time}`).toISOString();
+    const searchTimeWithTables = searchTimesWithTables.find((inst) => {
+      return inst.date.toISOString() === new Date(`${day}T${time}`).toISOString();
     });
 
     if (!searchTimeWithTables) {
       return res.status(404).json({ errorMessage: "No availability, cannot book" });
     }
 
+    // declare an object to hold the number of available tables for each seat size
     const tablesCount: {
       2: number[];
       4: number[];
@@ -81,34 +81,45 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       4: [],
     };
 
-    searchTimeWithTables.tables.forEach((table) => {
-      if (table.seats === 2) {
-        tablesCount[2].push(table.id);
+    // loop through the available tables and add the id to the appropriate array in `tablesCount`
+    for (let inst of searchTimeWithTables.tables) {
+      if (inst.seats === 2) {
+        tablesCount[2].push(inst.id);
       } else {
-        tablesCount[4].push(table.id);
+        tablesCount[4].push(inst.id);
       }
-    });
+    }
 
+    // declare an array to hold the table ids we will book
     const tablesToBook: number[] = [];
+
+    // set the number of seats remaining to be booked to the total party size
     let seatsRemaining = parseInt(partySize);
 
+    // loop through the available tables and add them to the tablesToBook array
     while (seatsRemaining > 0) {
+      // if there are more than 2 seats remaining to be booked, check if there are any 4 seat tables available
       if (seatsRemaining > 2) {
         if (tablesCount[4].length) {
+          // if there are 4 seat tables available, book the first one and reduce the number of seats remaining to be booked by 4
           tablesToBook.push(tablesCount[4][0]);
           tablesCount[4].shift();
           seatsRemaining -= 4;
         } else {
+          // if there are no 4 seat tables available, book the first 2 seat table and reduce the number of seats remaining to be booked by 2
           tablesToBook.push(tablesCount[2][0]);
           tablesCount[2].shift();
           seatsRemaining -= 2;
         }
       } else {
+        // if there are 2 or fewer seats remaining to be booked, check if there are any 2 seat tables available
         if (tablesCount[2].length) {
+          // if there are 2 seat tables available, book the first one and reduce the number of seats remaining to be booked by 2
           tablesToBook.push(tablesCount[2][0]);
           tablesCount[2].shift();
           seatsRemaining -= 2;
         } else {
+          // if there are no 2 seat tables available, book the first 4 seat table and reduce the number of seats remaining to be booked by 4
           tablesToBook.push(tablesCount[4][0]);
           tablesCount[4].shift();
           seatsRemaining -= 4;

@@ -25,6 +25,7 @@ export const findAvailableTables = async ({
     return;
   }
 
+  // Get the bookings in the searchTimes range
   const bookings = await prisma.booking.findMany({
     where: {
       booking_time: {
@@ -39,35 +40,48 @@ export const findAvailableTables = async ({
     },
   });
 
+  // Step 1: Create a booking object for each booking with an object of table ids:
+  // Create an object to store the tables booked for each booking
   const bookingTablesObj: { [key: string]: { [key: number]: true } } = {};
 
-  bookings.forEach((inst) => {
-    bookingTablesObj[inst.booking_time.toISOString()] = inst.tables.reduce((acc, table) => {
+  // Loop through each booking
+  for (let inst of bookings) {
+    // Create an object for each table booked
+    const tableIdObj = inst.tables.reduce((acc, table) => {
       return {
         ...acc,
         [table.table_id]: true,
       };
     }, {});
-  });
 
-  const tables = restaurant.tables;
+    // Store the table booked for each booking
+    bookingTablesObj[inst.booking_time.toISOString()] = tableIdObj;
+  }
 
-  const searchTimesWithTables = searchTimes.map((searchTime) => {
+  // Step 2: Create a search time object for each search time with an array of tables:
+  const searchTimesWithTables = searchTimes.map((inst) => {
     return {
-      date: new Date(`${day}T${searchTime}`),
-      time: searchTime,
-      tables: tables,
+      date: new Date(`${day}T${inst}`),
+      time: inst,
+      tables: restaurant.tables,
     };
   });
 
-  searchTimesWithTables.forEach((t) => {
-    t.tables = t.tables.filter((table) => {
-      if (bookingTablesObj[t.date.toISOString()]) {
-        if (bookingTablesObj[t.date.toISOString()][table.id]) return false;
+  // Step 3: Filter the tables of each search time object to only include those not booked:
+  for (let inst of searchTimesWithTables) {
+    inst.tables = inst.tables.filter((table) => {
+      if (bookingTablesObj[inst.date.toISOString()]) {
+        if (bookingTablesObj[inst.date.toISOString()][table.id]) {
+          return false;
+        }
       }
       return true;
     });
-  });
+  }
+
+  for(let inst of searchTimesWithTables) {
+    console.log('inst.tables', inst.tables)
+  }
 
   return searchTimesWithTables;
 };

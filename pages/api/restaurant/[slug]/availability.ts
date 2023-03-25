@@ -3,7 +3,6 @@ import { findAvailableTables } from "@/services/restaurant/findAvailableTables";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/lib/prisma";
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     const { slug, day, time, partySize } = req.query as {
@@ -28,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         close_time: true,
       },
     });
-  
+
     if (!restaurant) {
       return res.status(400).json({
         errorMessage: "Invaild restaurant provided",
@@ -41,24 +40,37 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(404).json({ errorMessage: "Invalid data provided" });
     }
 
-    const availabilities = searchTimesWithTables
-      .map((t) => {
-        const sumSeats = t.tables.reduce((acc, table) => {
-          return acc + table.seats;
-        }, 0);
+    // Map over the searchTimesWithTables array
+    // For each instance of the searchTimesWithTables array, return an object
+    let availabilities = searchTimesWithTables.map((inst) => {
+      // Create a variable and initialize it to the sum of the seats of each table at the instance
+      const sumSeats = inst.tables.reduce((acc, table) => {
+        return acc + table.seats;
+      }, 0);
 
-        return {
-          time: t.time,
-          available: sumSeats >= parseInt(partySize),
-        };
-      })
-      .filter((inst) => {
-        const timeIsAfterOpeningHour = new Date(`${day}T${inst.time}`) >= new Date(`${day}T${restaurant.open_time}`);
-        const timeIsBeforeClosingHour = new Date(`${day}T${inst.time}`) <= new Date(`${day}T${restaurant.close_time}`);
+      // Return an object with two properties: time and available
+      // The time property should be set to the time property of the instance
+      // The available property should be set to a boolean indicating if the time has enough seats for the party size
+      return {
+        time: inst.time,
+        available: sumSeats >= parseInt(partySize),
+      };
+    });
 
-        return timeIsAfterOpeningHour && timeIsBeforeClosingHour;
-      });
+    // Filter the availabilities array
+    // For each instance of the availabilities array, return a boolean
+    // The boolean should be true if the instance's time is after the restaurant's opening time and before the restaurant's closing time
+    availabilities = availabilities.filter((inst) => {
+      // Create a variable and initialize it to a boolean indicating if the instance's time is after the restaurant's opening time
+      const timeIsAfterOpeningHour = new Date(`${day}T${inst.time}`) >= new Date(`${day}T${restaurant.open_time}`);
+      // Create a variable and initialize it to a boolean indicating if the instance's time is before the restaurant's closing time
+      const timeIsBeforeClosingHour = new Date(`${day}T${inst.time}`) <= new Date(`${day}T${restaurant.close_time}`);
 
+      // Return a boolean indicating if the instance's time is after the restaurant's opening time and before the restaurant's closing time
+      return timeIsAfterOpeningHour && timeIsBeforeClosingHour;
+    });
+
+    console.log('availabilities', availabilities)
     return res.status(200).json(availabilities);
   } else {
     res.status(400).json({ errorMessage: "Method not allowed" });

@@ -22,7 +22,7 @@ const ReservationCard = ({ open_time, close_time, slug }: { open_time: string; c
       isWithinTimeWindow = true;
     } else if (time.time === close_time) {
       isWithinTimeWindow = false;
-      return true; 
+      return true;
     }
     return isWithinTimeWindow;
   });
@@ -30,9 +30,16 @@ const ReservationCard = ({ open_time, close_time, slug }: { open_time: string; c
   const dateChangeHandler = (date: Date | null) => {
     if (date) {
       // date is in this format "2023-01-01T00:00:00.000Z"
+      //setSelectedDate to today if date is in the past
       const d = date.toISOString().split("T")[0];
-      setDay(d);
-      setSelectedDate(date);
+      if (date < new Date()) {
+        console.log("cannot select a date in the past");
+        setSelectedDate(new Date());
+        setDay(d);
+      } else {
+        setSelectedDate(date);
+        setDay(d);
+      }
       return;
     }
     setSelectedDate(null);
