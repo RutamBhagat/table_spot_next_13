@@ -2,13 +2,32 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+
+clone the repository locally
+
+cd into the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm i
+```
+
+create a .env file in the root of the project 
+
+paste your database url in the .env file for Ex.
+
+DATABASE_URL="postgres://postgres:[password].[dbstring]:[port]/postgres"
+
+paste your JWT secret in the .env file, this can be any random string you want for Ex.
+
+JWT_SECRET="WyvV7oKWPLkfPWWj0qk9vnlu7"
+
+```bash
+pnpx prisma generate && pnpx prisma migrate dev
+```
+
+Run the development server:
+
+```bash
 pnpm dev
 ```
 
