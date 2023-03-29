@@ -33,27 +33,23 @@ export default function useReservation() {
     setLoading(true);
 
     try {
-      const response = await fetch(`/api/restaurant/${slug}/reserve?day=${day}&time=${time}&partySize=${partySize}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          bookerFirstName,
-          bookerLastName,
-          bookerPhone,
-          bookerEmail,
-          bookerOccasion,
-          bookerRequest,
-        }),
-        cache: "no-store",
-      });
+      const response = await axios.post(
+        `/api/restaurant/${slug}/reserve`,
+        { bookerFirstName, bookerLastName, bookerPhone, bookerEmail, bookerOccasion, bookerRequest },
+        {
+          params: {
+            day: day,
+            time: time,
+            partySize: partySize,
+          },
+        }
+      );
       setLoading(false);
       setDidBook(true);
-      return await response.json();
+      return response.data;
     } catch (error: any) {
       setLoading(false);
-      setError(error.errorMessage);
+      setError(error.response.data.errorMessage);
     }
   };
 

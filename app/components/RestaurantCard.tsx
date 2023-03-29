@@ -5,22 +5,30 @@ import { type RestaurantCardType } from "../page";
 import PriceComponent from "./PriceComponent";
 import StarsComponent from "./StarsComponent";
 
-const RestaurantCard = async ({ restaurant }: { restaurant: RestaurantCardType }) => {
-  const totalRestaurantRating = restaurant.reviews.reduce((acc, inst) => {
-    return acc + inst.rating;
-  }, 0);
-  const averageRestaurantRating = parseFloat((totalRestaurantRating / restaurant.reviews.length || 0).toFixed(1));
-
+const fetchNumberOfBookings = async (id: number): Promise<number> => {
   const day = new Date().toISOString().split("T")[0];
+
   const bookings = await prisma.booking.findMany({
     where: {
-      restaurant_id: restaurant.id,
+      restaurant_id: id,
       booking_time: {
         gte: new Date(`${day}T00:00:00.000Z`),
         lte: new Date(`${day}T23:30:00.000Z`),
       },
     },
   });
+
+  return bookings.length;
+};
+
+export default async function RestaurantCard({ restaurant }: { restaurant: RestaurantCardType }) {
+  const totalRestaurantRating = restaurant.reviews.reduce((acc, inst) => {
+    return acc + inst.rating;
+  }, 0);
+
+  const averageRestaurantRating = parseFloat((totalRestaurantRating / restaurant.reviews.length || 0).toFixed(1));
+
+  const numberOfBookings = await fetchNumberOfBookings(restaurant.id);
 
   return (
     <Link
@@ -40,7 +48,7 @@ const RestaurantCard = async ({ restaurant }: { restaurant: RestaurantCardType }
           <p className="text-center">Location {restaurant.location.name}</p>
         </div>
         <div className="flex justify-between py-2">
-          <p className="text-sm mt-1 font-bold">Booked {bookings.length} times today</p>
+          <p className="text-sm mt-1 font-bold">Booked {numberOfBookings} times today</p>
           <div className="flex items-start">
             <StarsComponent stars={averageRestaurantRating} />
             <p className="ml-2">{restaurant.reviews.length} reviews</p>
@@ -49,6 +57,4 @@ const RestaurantCard = async ({ restaurant }: { restaurant: RestaurantCardType }
       </div>
     </Link>
   );
-};
-
-export default RestaurantCard;
+}
