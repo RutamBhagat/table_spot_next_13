@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import * as jose from "jose";
 
 export async function middleware(req: NextRequest, res: NextResponse) {
-  //Token extraction is different in middleware than the one in pages/api
-  const bearerToken = req.headers.get("authorization");
-  const token = bearerToken?.split(" ")[1];
+  //Token extraction is different in middleware than the one in route handler
+  const bearerToken = req.headers.get("authorization") as string;
+  const token = bearerToken.split(" ")[1];
+
+
   if (!bearerToken || !token) {
     return new NextResponse(JSON.stringify({ error: "Please provide authorization token" }), { status: 401 });
   }
