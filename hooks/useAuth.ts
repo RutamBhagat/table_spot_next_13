@@ -29,6 +29,7 @@ const useAuth = () => {
         data: null,
         error: error.response.data.errorMessage,
       });
+      console.log('error.response.data.errorMessage', error.response.data.errorMessage)
       throw new Error("Error signing in");
     }
   };
