@@ -3,6 +3,12 @@ import RestaurantCard from "./components/RestaurantCard";
 import { type PRICE, type Cuisine, type Location, type Review } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
+
+export const metadata = {
+  title: "Table Spot",
+  description: "Find the best restaurants in your area",
+};
+
 export type RestaurantCardType = {
   id: number;
   name: string;

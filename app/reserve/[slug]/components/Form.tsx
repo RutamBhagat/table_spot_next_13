@@ -3,7 +3,7 @@ import ErrorComponent from "@/app/restaurant/[slug]/components/ErrorComponent";
 import useReservation from "@/hooks/useReservation";
 import React, { type ChangeEvent, type FormEvent, useEffect, useState, useContext } from "react";
 import { AuthenticationContext } from "@/app/context/AuthContext";
-import Link from "next/link";
+
 
 const defaultFormFields = {
   bookerFirstName: "",

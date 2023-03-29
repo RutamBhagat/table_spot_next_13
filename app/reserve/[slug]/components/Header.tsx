@@ -21,7 +21,7 @@ const Header = ({
   return (
     <Link
       href={`/restaurant/${slug}`}
-      className="flex w-[95%] items-center m-3 bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+      className="flex w-4/5 mx-auto items-center m-3 bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
     >
       <div className="w-3/5">
         <img className="rounded-l-lg object-cover h-60 w-full" src={image} alt="" />

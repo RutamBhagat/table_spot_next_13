@@ -6,6 +6,7 @@ import Form from "./components/Form";
 import Header from "./components/Header";
 import { useSearchParams } from "next/navigation";
 
+
 export default function () {
   const searchParams = useSearchParams();
   const [date, setDate] = useState("");
@@ -19,9 +20,9 @@ export default function () {
   } | null>(null);
 
   useEffect(() => {
-    setDate(searchParams.get("date") as string);
-    setPartySize(searchParams.get("partySize") as string);
-    setSlug(searchParams.get("slug") as string);
+    setDate(searchParams?.get("date") as string);
+    setPartySize(searchParams?.get("partySize") as string);
+    setSlug(searchParams?.get("slug") as string);
 
     const getRestaurant = async () => {
       const response = await axios.post<{
@@ -29,7 +30,7 @@ export default function () {
         main_image: string;
         name: string;
       } | null>(`/api/reserve/reserveRestaurant`, {
-        slug: searchParams.get("slug"),
+        slug: searchParams?.get("slug"),
       });
       setRestaurant(response.data);
     };
@@ -44,7 +45,7 @@ export default function () {
   return (
     <div className="min-h-screen py-10">
       <div className="p-8 py-10 w-3/5 m-auto rounded-lg bg-[#dee3ea]">
-        <Header image={restaurant.main_image} name={restaurant.name} date={date} partySize={partySize} slug={searchParams.get("slug") || ""} />
+        <Header image={restaurant.main_image} name={restaurant.name} date={date} partySize={partySize} slug={searchParams?.get("slug") || ""} />
         <div className="flex justify-center items-center">
           <Form slug={slug} date={date} partySize={partySize} />
         </div>

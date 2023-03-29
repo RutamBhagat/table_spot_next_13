@@ -9,6 +9,19 @@ import RestaurantNavbar from "./components/RestaurantNavbar";
 import Reviews from "./components/Reviews";
 import { prisma } from "@/lib/prisma";
 
+function toTitleCase(str: string) {
+  return str.replace(/\w\S*/g, function (txt) {
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  });
+}
+
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  return {
+    title: toTitleCase(params.slug.split("-").join(" ")),
+    description: "Find the best restaurants in your area",
+  };
+}
+
 export type RestaurantBySlugType = {
   id: number;
   name: string;

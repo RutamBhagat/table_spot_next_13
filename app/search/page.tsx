@@ -7,6 +7,12 @@ import { type Review, type Cuisine, type Location, type PRICE } from "@prisma/cl
 import shortid from "shortid";
 import { prisma } from "@/lib/prisma";
 
+
+export const metadata = {
+  title: "Search Restaurants | Table Spot",
+  description: "Find the best restaurants in your area",
+};
+
 export type searchParamsType = {
   city: string;
   cuisine?: string;
