@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
+import { PrismaClient } from "@prisma/client";
 import { findAvailableTables } from "@/services/restaurant/findAvailableTables";
 
 const prisma = new PrismaClient();
@@ -45,7 +45,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const searchTimesWithTables = await findAvailableTables({
       day,
       time,
-      res,
       restaurant,
     });
 
@@ -75,11 +74,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     };
 
     // Iterate over all tables in the searchTimeWithTables object
-    for(let inst of searchTimeWithTables.tables){
+    for (let inst of searchTimeWithTables.tables) {
       // If the table has 2 seats, add its id to the 2 seat array
       if (inst.seats === 2) {
         tablesCount[2].push(inst.id);
-      // If the table has 4 seats, add its id to the 4 seat array
+        // If the table has 4 seats, add its id to the 4 seat array
       } else {
         tablesCount[4].push(inst.id);
       }
@@ -99,20 +98,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           tablesToBooks.push(tablesCount[4][0]);
           tablesCount[4].shift();
           seatsRemaining = seatsRemaining - 4;
-        // Otherwise, book a 2 seat table
+          // Otherwise, book a 2 seat table
         } else {
           tablesToBooks.push(tablesCount[2][0]);
           tablesCount[2].shift();
           seatsRemaining = seatsRemaining - 2;
         }
-      // If there are only 2 seats remaining, try and book a 2 seat table
+        // If there are only 2 seats remaining, try and book a 2 seat table
       } else {
         // If there are any 2 seat tables left, book the first one
         if (tablesCount[2].length) {
           tablesToBooks.push(tablesCount[2][0]);
           tablesCount[2].shift();
           seatsRemaining = seatsRemaining - 2;
-        // Otherwise, book a 4 seat table
+          // Otherwise, book a 4 seat table
         } else {
           tablesToBooks.push(tablesCount[4][0]);
           tablesCount[4].shift();

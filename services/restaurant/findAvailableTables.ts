@@ -1,15 +1,12 @@
 import { times } from "@/data";
 import { type Table } from "@prisma/client";
-import { NextApiResponse } from "next";
 import { prisma } from "@/lib/prisma";
 
 export const findAvailableTables = async ({
-  res,
   day,
   time,
   restaurant,
 }: {
-  res: NextApiResponse;
   day: string;
   time: string;
   restaurant: {
@@ -22,8 +19,7 @@ export const findAvailableTables = async ({
   const searchTimes = times.find((inst) => inst.time === time)?.searchTimes;
 
   if (!searchTimes) {
-    res.status(400).json({ errorMessage: "Invalid data provided" });
-    return;
+    return null;
   }
 
   // Get the bookings in the searchTimes range

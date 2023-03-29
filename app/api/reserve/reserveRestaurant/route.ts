@@ -20,6 +20,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json(restaurant, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ errorMessage: "Error fetching restaurant" }, { status: 400 });
+    return NextResponse.json({ errorMessage: "Error fetching restaurant" }, { status: 500 });
   }
 }

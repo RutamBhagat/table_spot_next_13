@@ -38,3 +38,4 @@ export default function useAvailabilities() {
 
   return { loading, error, data, fetchAvailabilities };
 }
+
