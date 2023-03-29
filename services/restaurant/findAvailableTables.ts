@@ -13,6 +13,7 @@ export const findAvailableTables = async ({
   day: string;
   time: string;
   restaurant: {
+    id: number;
     tables: Table[];
     open_time: string;
     close_time: string;
@@ -28,6 +29,7 @@ export const findAvailableTables = async ({
   // Get the bookings in the searchTimes range
   const bookings = await prisma.booking.findMany({
     where: {
+      restaurant_id: restaurant.id,
       booking_time: {
         gte: new Date(`${day}T${searchTimes[0]}`),
         lte: new Date(`${day}T${searchTimes[searchTimes.length - 1]}`),

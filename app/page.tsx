@@ -38,6 +38,7 @@ export default async function Home() {
       <Header />
       <div className="py-3 px-36 pt-10 flex flex-wrap justify-center bg-[#0a081a]">
         {restaurants.map((restaurant) => {
+          // @ts-ignore //
           return <RestaurantCard key={restaurant.id} restaurant={restaurant} />;
         })}
       </div>

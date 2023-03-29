@@ -22,6 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         slug: slug,
       },
       select: {
+        id: true,
         tables: true,
         open_time: true,
         close_time: true,

@@ -20,10 +20,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         slug,
       },
       select: {
+        id: true,
         tables: true,
         open_time: true,
         close_time: true,
-        id: true,
       },
     });
 
