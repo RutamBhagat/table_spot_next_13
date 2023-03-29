@@ -4,7 +4,6 @@ import { prisma } from "@/lib/prisma";
 export async function POST(request: Request) {
   const req = await request.json(); // req now is the body
   const { slug } = req;
-  console.log('slug', slug)
 
   try {
     const restaurant = await prisma.restaurant.findUnique({
