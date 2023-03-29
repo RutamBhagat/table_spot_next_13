@@ -54,8 +54,16 @@ export const findAvailableTables = async ({
       };
     }, {});
 
-    // Store the table booked for each booking
-    bookingTablesObj[inst.booking_time.toISOString()] = tableIdObj;
+    // THIS WAS THE ORIGINAL PROBLEM:
+    // You were overwriting the tableIdObj for each booking with the latest booking's tableIdObj
+    // // Store the table booked for each booking
+    // bookingTablesObj[inst.booking_time.toISOString()] = tableIdObj;
+
+    // Store the table booked for each booking properly
+    bookingTablesObj[inst.booking_time.toISOString()] = {
+      ...(bookingTablesObj[inst.booking_time.toISOString()] || {}),
+      ...tableIdObj,
+    };
   }
 
   // Step 2: Create a search time object for each search time with an array of tables:
@@ -79,9 +87,10 @@ export const findAvailableTables = async ({
     });
   }
 
-  for(let inst of searchTimesWithTables) {
-    console.log('inst.tables', inst.tables)
-  }
-
   return searchTimesWithTables;
 };
+
+`
+bookings [{"number_of_people":8,"booking_time":"2023-03-29T10:00:00.000Z","tables":[{"booking_id":49,"table_id":295,"created_at":"2023-03-29T14:23:32.805Z","updated_at":"2023-03-29T14:23:32.805Z"},{"booking_id":49,"table_id":296,"created_at":"2023-03-29T14:23:32.805Z","updated_at":"2023-03-29T14:23:32.805Z"}]},{"number_of_people":2,"booking_time":"2023-03-29T10:00:00.000Z","tables":[{"booking_id":50,"table_id":297,"created_at":"2023-03-29T14:24:45.824Z","updated_at":"2023-03-29T14:24:45.824Z"}]}]
+bookingTablesObj { '2023-03-29T10:00:00.000Z': { '297': true } }
+`;
