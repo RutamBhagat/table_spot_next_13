@@ -28,7 +28,7 @@ export default async function RestaurantCard({ restaurant }: { restaurant: Resta
 
   const averageRestaurantRating = parseFloat((totalRestaurantRating / restaurant.reviews.length || 0).toFixed(1));
 
-  const numberOfBookings = await fetchNumberOfBookings(restaurant.id);
+  const numberOfBookings = await fetchNumberOfBookings(restaurant.id); 
 
   return (
     <Link
