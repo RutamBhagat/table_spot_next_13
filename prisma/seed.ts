@@ -14,7 +14,7 @@ async function main() {
   await prisma.restaurant.deleteMany();
 
   await prisma.location.createMany({
-    data: [{ name: "ottawa" }, { name: "toronto" }, { name: "niagara" }],
+    data: [{ name: "mumbai" }, { name: "goa" }, { name: "delhi" }],
   });
 
   await prisma.cuisine.createMany({
@@ -24,13 +24,13 @@ async function main() {
   const locations = await prisma.location.findMany();
   const cuisines = await prisma.cuisine.findMany();
 
-  const indianCuisineId = cuisines.find((cuisine) => cuisine.name === "indian")?.id || 1;
-  const mexicanCuisineId = cuisines.find((cuisine) => cuisine.name === "mexican")?.id || 1;
-  const italianCuisineId = cuisines.find((cuisine) => cuisine.name === "italian")?.id || 1;
+  const indianCuisineId = cuisines.find((cuisine) => cuisine.name === "indian")?.id || "1";
+  const mexicanCuisineId = cuisines.find((cuisine) => cuisine.name === "mexican")?.id || "1";
+  const italianCuisineId = cuisines.find((cuisine) => cuisine.name === "italian")?.id || "1";
 
-  const ottawaLocationId = locations.find((location) => location.name === "ottawa")?.id || 1;
-  const torontoLocationId = locations.find((location) => location.name === "toronto")?.id || 1;
-  const niagaraLocationId = locations.find((location) => location.name === "niagara")?.id || 1;
+  const mumbaiLocationId = locations.find((location) => location.name === "mumbai")?.id || "1";
+  const goaLocationId = locations.find((location) => location.name === "goa")?.id || "1";
+  const delhiLocationId = locations.find((location) => location.name === "delhi")?.id || "1";
 
   await prisma.restaurant.createMany({
     data: [
@@ -49,8 +49,8 @@ async function main() {
         ],
         open_time: "14:30:00.000Z",
         close_time: "21:30:00.000Z",
-        slug: "vivaan-fine-indian-cuisine-ottawa",
-        location_id: ottawaLocationId,
+        slug: "vivaan-fine-indian-cuisine-mumbai",
+        location_id: mumbaiLocationId,
         cuisine_id: indianCuisineId,
       },
       {
@@ -67,8 +67,8 @@ async function main() {
         ],
         open_time: "12:30:00.000Z",
         close_time: "22:00:00.000Z",
-        slug: "ramakrishna-indian-restaurant-ottawa",
-        location_id: ottawaLocationId,
+        slug: "ramakrishna-indian-restaurant-mumbai",
+        location_id: mumbaiLocationId,
         cuisine_id: indianCuisineId,
       },
       {
@@ -85,8 +85,8 @@ async function main() {
         ],
         open_time: "17:30:00.000Z",
         close_time: "22:00:00.000Z",
-        slug: "coconut-lagoon-ottawa",
-        location_id: ottawaLocationId,
+        slug: "coconut-lagoon-mumbai",
+        location_id: mumbaiLocationId,
         cuisine_id: indianCuisineId,
       },
       {
@@ -94,7 +94,7 @@ async function main() {
         main_image: "https://resizer.otstatic.com/v2/photos/wide-huge/3/26429498.jpg",
         price: PRICE.REGULAR,
         description:
-          "Welcome to Last Train to Delhi. We are a progressive Indian restaurant in the beautiful Glebe community in Ottawa. Our speciality is Northern Indian food, classics like Murg Mahkini and some modern dishes like Crispy Shrimp. We are a small cozy restaurant, so make sure that you reserve through OpenTable.",
+          "Welcome to Last Train to Delhi. We are a progressive Indian restaurant in the beautiful Glebe community in Mumbai. Our speciality is Northern Indian food, classics like Murg Mahkini and some modern dishes like Crispy Shrimp. We are a small cozy restaurant, so make sure that you reserve through OpenTable.",
         images: [
           "https://resizer.otstatic.com/v2/photos/xlarge/1/29477326.jpg",
           "https://resizer.otstatic.com/v2/photos/xlarge/1/29777084.jpg",
@@ -103,8 +103,8 @@ async function main() {
         ],
         open_time: "10:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "last-train-to-delhi-ottawa",
-        location_id: ottawaLocationId,
+        slug: "last-train-to-delhi-mumbai",
+        location_id: mumbaiLocationId,
         cuisine_id: indianCuisineId,
       },
       {
@@ -121,8 +121,8 @@ async function main() {
         ],
         open_time: "16:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "adrak-yorkville-toronto",
-        location_id: torontoLocationId,
+        slug: "adrak-yorkville-goa",
+        location_id: goaLocationId,
         cuisine_id: indianCuisineId,
       },
       {
@@ -139,8 +139,8 @@ async function main() {
         ],
         open_time: "10:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "curryish-tavern-toronto",
-        location_id: torontoLocationId,
+        slug: "curryish-tavern-goa",
+        location_id: goaLocationId,
         cuisine_id: indianCuisineId,
       },
       {
@@ -155,8 +155,8 @@ async function main() {
         ],
         open_time: "14:00:00.000Z",
         close_time: "19:00:00.000Z",
-        slug: "utsav-toronto",
-        location_id: torontoLocationId,
+        slug: "utsav-goa",
+        location_id: goaLocationId,
         cuisine_id: indianCuisineId,
       },
       {
@@ -173,8 +173,8 @@ async function main() {
         ],
         open_time: "12:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "pukka-niagara",
-        location_id: niagaraLocationId,
+        slug: "pukka-delhi",
+        location_id: delhiLocationId,
         cuisine_id: indianCuisineId,
       },
       {
@@ -182,7 +182,7 @@ async function main() {
         main_image: "https://resizer.otstatic.com/v2/photos/xlarge/1/25602522.jpg",
         price: PRICE.CHEAP,
         description:
-          "This elegant fine dining Indian Restaurant has been satisfying the Indian tandoori and curry cravings for 12 years in Toronto.",
+          "This elegant fine dining Indian Restaurant has been satisfying the Indian tandoori and curry cravings for 12 years in Goa.",
         images: [
           "https://resizer.otstatic.com/v2/photos/xlarge/3/31854185.jpg",
           "https://resizer.otstatic.com/v2/photos/xlarge/3/31854188.jpg",
@@ -191,8 +191,8 @@ async function main() {
         ],
         open_time: "10:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "kamasutra-indian-restaurant-and-wine-bar-niagara",
-        location_id: niagaraLocationId,
+        slug: "kamasutra-indian-restaurant-and-wine-bar-delhi",
+        location_id: delhiLocationId,
         cuisine_id: indianCuisineId,
       },
       // MEXICAN //
@@ -201,7 +201,7 @@ async function main() {
         main_image: "https://resizer.otstatic.com/v2/photos/wide-huge/2/42557297.jpg",
         price: PRICE.REGULAR,
         description:
-          "Eldorado Taco restaurant is excited to serve you traditional Mexican cuisine, re-imagined with a distinct modern flair, in a stylish setting on Preston street. Striving to bring you some of Ottawa’s best Tacos, margaritas and Tequila. Reserve your table now!",
+          "Eldorado Taco restaurant is excited to serve you traditional Mexican cuisine, re-imagined with a distinct modern flair, in a stylish setting on Preston street. Striving to bring you some of Mumbai's best Tacos, margaritas and Tequila. Reserve your table now!",
         images: [
           "https://resizer.otstatic.com/v2/photos/xlarge/1/29501707.jpg",
           "https://resizer.otstatic.com/v2/photos/xlarge/1/29501713.jpg",
@@ -210,8 +210,8 @@ async function main() {
         ],
         open_time: "16:00:00.000Z",
         close_time: "19:00:00.000Z",
-        slug: "eldorado-taco-ottawa",
-        location_id: ottawaLocationId,
+        slug: "eldorado-taco-mumbai",
+        location_id: mumbaiLocationId,
         cuisine_id: mexicanCuisineId,
       },
       {
@@ -230,8 +230,8 @@ async function main() {
         ],
         open_time: "12:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "la-bartola-ottawa",
-        location_id: ottawaLocationId,
+        slug: "la-bartola-mumbai",
+        location_id: mumbaiLocationId,
         cuisine_id: mexicanCuisineId,
       },
       {
@@ -247,8 +247,8 @@ async function main() {
         ],
         open_time: "09:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "el-catrin-ottawa",
-        location_id: ottawaLocationId,
+        slug: "el-catrin-mumbai",
+        location_id: mumbaiLocationId,
         cuisine_id: mexicanCuisineId,
       },
       {
@@ -265,8 +265,8 @@ async function main() {
         ],
         open_time: "09:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "el-catrin-toronto",
-        location_id: torontoLocationId,
+        slug: "el-catrin-goa",
+        location_id: goaLocationId,
         cuisine_id: mexicanCuisineId,
       },
       {
@@ -284,8 +284,8 @@ async function main() {
         ],
         open_time: "15:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "casa-madera-toronto",
-        location_id: torontoLocationId,
+        slug: "casa-madera-goa",
+        location_id: goaLocationId,
         cuisine_id: mexicanCuisineId,
       },
       {
@@ -303,8 +303,8 @@ async function main() {
         ],
         open_time: "10:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "casa-madera-niagara",
-        location_id: niagaraLocationId,
+        slug: "casa-madera-delhi",
+        location_id: delhiLocationId,
         cuisine_id: mexicanCuisineId,
       },
       {
@@ -316,8 +316,8 @@ async function main() {
         images: [],
         open_time: "10:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "el-jefe-niagara",
-        location_id: niagaraLocationId,
+        slug: "el-jefe-delhi",
+        location_id: delhiLocationId,
         cuisine_id: mexicanCuisineId,
       },
       // ITALIAN //
@@ -337,8 +337,8 @@ async function main() {
         ],
         open_time: "13:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "cano-restaurant-ottawa",
-        location_id: ottawaLocationId,
+        slug: "cano-restaurant-mumbai",
+        location_id: mumbaiLocationId,
         cuisine_id: italianCuisineId,
       },
       {
@@ -357,8 +357,8 @@ async function main() {
         ],
         open_time: "15:00:00.000Z",
         close_time: "22:00:00.000Z",
-        slug: "blu-ristorante-ottawa",
-        location_id: ottawaLocationId,
+        slug: "blu-ristorante-mumbai",
+        location_id: mumbaiLocationId,
         cuisine_id: italianCuisineId,
       },
       {
@@ -376,8 +376,8 @@ async function main() {
         ],
         open_time: "13:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "stelvio-ottawa",
-        location_id: ottawaLocationId,
+        slug: "stelvio-mumbai",
+        location_id: mumbaiLocationId,
         cuisine_id: italianCuisineId,
       },
       {
@@ -385,7 +385,7 @@ async function main() {
         main_image: "https://resizer.otstatic.com/v2/photos/wide-huge/3/46827195.jpg",
         price: PRICE.REGULAR,
         description:
-          "Terroni Adelaide’s multi-level location is located in Toronto’s historic York County Court House circa 1853.",
+          "Terroni Adelaide’s multi-level location is located in Goa's historic York County Court House circa 1853.",
         images: [
           "https://resizer.otstatic.com/v2/photos/xlarge/2/42309468.png",
           "https://resizer.otstatic.com/v2/photos/xlarge/2/42309469.png",
@@ -395,8 +395,8 @@ async function main() {
         ],
         open_time: "12:00:00.000Z",
         close_time: "18:00:00.000Z",
-        slug: "terroni-adelaide-niagara",
-        location_id: niagaraLocationId,
+        slug: "terroni-adelaide-delhi",
+        location_id: delhiLocationId,
         cuisine_id: italianCuisineId,
       },
       {
@@ -416,8 +416,8 @@ async function main() {
         ],
         open_time: "09:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "est-restaurant-niagara",
-        location_id: niagaraLocationId,
+        slug: "est-restaurant-delhi",
+        location_id: delhiLocationId,
         cuisine_id: italianCuisineId,
       },
       {
@@ -435,8 +435,8 @@ async function main() {
         ],
         open_time: "13:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "sofia-toronto",
-        location_id: torontoLocationId,
+        slug: "sofia-goa",
+        location_id: goaLocationId,
         cuisine_id: italianCuisineId,
       },
       {
@@ -444,7 +444,7 @@ async function main() {
         main_image: "https://resizer.otstatic.com/v2/photos/wide-huge/3/49463645.png",
         price: PRICE.REGULAR,
         description:
-          "Spaccio West, near the Lower Junction on the West Toronto Railpath, acts as the backstage to the main show taking place at all Terroni locations.",
+          "Spaccio West, near the Lower Junction on the West Goa Railpath, acts as the backstage to the main show taking place at all Terroni locations.",
         images: [
           "https://resizer.otstatic.com/v2/photos/xlarge/2/48741813.jpg",
           "https://resizer.otstatic.com/v2/photos/xlarge/2/48741816.jpg",
@@ -454,8 +454,8 @@ async function main() {
         ],
         open_time: "10:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "terroni-sud-forno-produzione-e-spaccio-toronto",
-        location_id: torontoLocationId,
+        slug: "terroni-sud-forno-produzione-e-spaccio-goa",
+        location_id: goaLocationId,
         cuisine_id: italianCuisineId,
       },
       {
@@ -473,8 +473,8 @@ async function main() {
         ],
         open_time: "07:00:00.000Z",
         close_time: "21:00:00.000Z",
-        slug: "il-padrino-toronto",
-        location_id: torontoLocationId,
+        slug: "il-padrino-goa",
+        location_id: goaLocationId,
         cuisine_id: italianCuisineId,
       },
     ],
@@ -482,23 +482,23 @@ async function main() {
 
   const restaurants = await prisma.restaurant.findMany();
 
-  const vivaanId = restaurants.find((restaurant) => restaurant.name === "Vivaan - fine Indian")?.id || 1;
-  const RamaKrishnaId = restaurants.find((restaurant) => restaurant.name === "RamaKrishna Indian")?.id || 1;
-  const coconutLagoonId = restaurants.find((restaurant) => restaurant.name === "Coconut Lagoon")?.id || 1;
-  const lastTrainToDelhiId = restaurants.find((restaurant) => restaurant.name === "Last Train to Delhi")?.id || 1;
-  const adrakYorkvilleId = restaurants.find((restaurant) => restaurant.name === "Adrak Yorkville")?.id || 1;
-  const curryishTavernId = restaurants.find((restaurant) => restaurant.name === "Curryish Tavern")?.id || 1;
-  const utsavId = restaurants.find((restaurant) => restaurant.name === "Utsav")?.id || 1;
-  const pukkaId = restaurants.find((restaurant) => restaurant.name === "Pukka")?.id || 1;
-  const kamasutraIndianId = restaurants.find((restaurant) => restaurant.name === "Kamasutra Indian")?.id || 1;
-  const eldoradoTacoId = restaurants.find((restaurant) => restaurant.name === "Eldorado Taco")?.id || 1;
-  const laBartolaId = restaurants.find((restaurant) => restaurant.name === "La Bartola")?.id || 1;
-  const elCatrinId = restaurants.find((restaurant) => restaurant.name === "El Catrin")?.id || 1;
-  const mariachisId = restaurants.find((restaurant) => restaurant.name === "3 Mariachis")?.id || 1;
-  const canoRestaurantId = restaurants.find((restaurant) => restaurant.name === "Cano Restaurant")?.id || 1;
-  const bluRistoranteId = restaurants.find((restaurant) => restaurant.name === "Blu Ristorante")?.id || 1;
-  const stelvioId = restaurants.find((restaurant) => restaurant.name === "Stelvio")?.id || 1;
-  const sofiaId = restaurants.find((restaurant) => restaurant.name === "Sofia")?.id || 1;
+  const vivaanId = restaurants.find((restaurant) => restaurant.name === "Vivaan - fine Indian")?.id || "1";
+  const RamaKrishnaId = restaurants.find((restaurant) => restaurant.name === "RamaKrishna Indian")?.id || "1";
+  const coconutLagoonId = restaurants.find((restaurant) => restaurant.name === "Coconut Lagoon")?.id || "1";
+  const lastTrainToDelhiId = restaurants.find((restaurant) => restaurant.name === "Last Train to Delhi")?.id || "1";
+  const adrakYorkvilleId = restaurants.find((restaurant) => restaurant.name === "Adrak Yorkville")?.id || "1";
+  const curryishTavernId = restaurants.find((restaurant) => restaurant.name === "Curryish Tavern")?.id || "1";
+  const utsavId = restaurants.find((restaurant) => restaurant.name === "Utsav")?.id || "1";
+  const pukkaId = restaurants.find((restaurant) => restaurant.name === "Pukka")?.id || "1";
+  const kamasutraIndianId = restaurants.find((restaurant) => restaurant.name === "Kamasutra Indian")?.id || "1";
+  const eldoradoTacoId = restaurants.find((restaurant) => restaurant.name === "Eldorado Taco")?.id || "1";
+  const laBartolaId = restaurants.find((restaurant) => restaurant.name === "La Bartola")?.id || "1";
+  const elCatrinId = restaurants.find((restaurant) => restaurant.name === "El Catrin")?.id || "1";
+  const mariachisId = restaurants.find((restaurant) => restaurant.name === "3 Mariachis")?.id || "1";
+  const canoRestaurantId = restaurants.find((restaurant) => restaurant.name === "Cano Restaurant")?.id || "1";
+  const bluRistoranteId = restaurants.find((restaurant) => restaurant.name === "Blu Ristorante")?.id || "1";
+  const stelvioId = restaurants.find((restaurant) => restaurant.name === "Stelvio")?.id || "1";
+  const sofiaId = restaurants.find((restaurant) => restaurant.name === "Sofia")?.id || "1";
 
   await prisma.item.createMany({
     data: [
@@ -937,10 +937,9 @@ async function main() {
 
   const userLaith = await prisma.user.create({
     data: {
-      first_name: "Laith",
-      last_name: "Harb",
+      name: "Laith Harb",
       email: "laith@hotmail.com",
-      city: "ottawa",
+      city: "mumbai",
       password: "$2b$10$I8xkU2nQ8EAHuVOdbMy9YO/.rSU3584Y.H4LrpIujGNDtmny9FnLu",
       phone: "1112223333",
     },
@@ -948,10 +947,9 @@ async function main() {
 
   const userJosh = await prisma.user.create({
     data: {
-      first_name: "Josh",
-      last_name: "Allen",
+      name: "Josh Allen",
       email: "josh@hotmail.com",
-      city: "toronto",
+      city: "goa",
       password: "$2b$10$I8xkU2nQ8EAHuVOdbMy9YO/.rSU3584Y.H4LrpIujGNDtmny9FnLu",
       phone: "1112223333",
     },
@@ -959,10 +957,9 @@ async function main() {
 
   const userLebron = await prisma.user.create({
     data: {
-      first_name: "LeBron",
-      last_name: "James",
+      name: "LeBron James",
       email: "lebron@hotmail.com",
-      city: "niagara",
+      city: "delhi",
       password: "$2b$10$I8xkU2nQ8EAHuVOdbMy9YO/.rSU3584Y.H4LrpIujGNDtmny9FnLu",
       phone: "1112223333",
     },
@@ -970,10 +967,9 @@ async function main() {
 
   const userCassidy = await prisma.user.create({
     data: {
-      first_name: "Cassidy",
-      last_name: "Marksom",
+      name: "Cassidy Marksom",
       email: "cassidy@hotmail.com",
-      city: "toronto",
+      city: "goa",
       password: "$2b$10$I8xkU2nQ8EAHuVOdbMy9YO/.rSU3584Y.H4LrpIujGNDtmny9FnLu",
       phone: "1112223333",
     },
@@ -982,216 +978,189 @@ async function main() {
   await prisma.review.createMany({
     data: [
       {
-        first_name: "Laith",
-        last_name: "Harb",
+        name: "Laith Harb",
         text: "This place is amazing, it has some of the best dishes in the world. It is so so so good!!!",
         rating: 5,
         restaurant_id: vivaanId,
         user_id: userLaith.id,
       },
       {
-        first_name: "Laith",
-        last_name: "Harb",
+        name: "Laith Harb",
         text: "This food is so good! It is the fanciest thing I have ever seen in my short life",
         rating: 5,
         restaurant_id: bluRistoranteId,
         user_id: userLaith.id,
       },
       {
-        first_name: "Laith",
-        last_name: "Harb",
+        name: "Laith Harb",
         text: "Excellent food and service. Busy night, but everything was great! Highly recommend.",
         rating: 5,
         restaurant_id: elCatrinId,
         user_id: userLaith.id,
       },
       {
-        first_name: "Laith",
-        last_name: "Harb",
+        name: "Laith Harb",
         text: "Very nice place for a date night, the service was fast and friendly. The food was amazing.",
         rating: 4,
         restaurant_id: stelvioId,
         user_id: userLaith.id,
       },
       {
-        first_name: "Laith",
-        last_name: "Harb",
+        name: "Laith Harb",
         text: "Extremely disappointing in our experience.",
         rating: 2,
         restaurant_id: laBartolaId,
         user_id: userLaith.id,
       },
       {
-        first_name: "Laith",
-        last_name: "Harb",
+        name: "Laith Harb",
         text: "This place is amazing, it has some of the best dishes in the world. It is so so so good!!!",
         rating: 5,
         restaurant_id: elCatrinId,
         user_id: userLaith.id,
       },
       {
-        first_name: "Laith",
-        last_name: "Harb",
+        name: "Laith Harb",
         text: "As always, food was excellent. Waitress was friendly and prompt. We had just one problem in that our dessert order went rogue in the system and we waited ages for it to arrive.",
         rating: 5,
         restaurant_id: kamasutraIndianId,
         user_id: userLaith.id,
       },
       {
-        first_name: "Laith",
-        last_name: "Harb",
+        name: "Laith Harb",
         text: "Restaurant was loud and crowded. Food is not worth the price.",
         rating: 3,
         restaurant_id: eldoradoTacoId,
         user_id: userLaith.id,
       },
       {
-        first_name: "Josh",
-        last_name: "Allen",
+        name: "Josh Allen",
         text: "A Christmas lunch with clients served by a friendly server with a good wine selection everyone enjoyed the appetizers and meals",
         rating: 4,
         restaurant_id: vivaanId,
         user_id: userJosh.id,
       },
       {
-        first_name: "Josh",
-        last_name: "Allen",
+        name: "Josh Allen",
         text: "The food was very tasty, the price is a little high so a place to go only for special occasions",
         rating: 5,
         restaurant_id: sofiaId,
         user_id: userJosh.id,
       },
       {
-        first_name: "Josh",
-        last_name: "Allen",
+        name: "Josh Allen",
         text: "Had a great time at Chops. Our server Dane was super friendly. Dinner was delicious as always.",
         rating: 3,
         restaurant_id: curryishTavernId,
         user_id: userJosh.id,
       },
       {
-        first_name: "Josh",
-        last_name: "Allen",
+        name: "Josh Allen",
         text: "The service was poor as we had to wait a long time for our food. There were some issues but were dealt with in a proper manner.",
         rating: 3,
         restaurant_id: adrakYorkvilleId,
         user_id: userJosh.id,
       },
       {
-        first_name: "Josh",
-        last_name: "Allen",
+        name: "Josh Allen",
         text: "Wonderful food and service.",
         rating: 5,
         restaurant_id: coconutLagoonId,
         user_id: userJosh.id,
       },
       {
-        first_name: "Josh",
-        last_name: "Allen",
+        name: "Josh Allen",
         text: "Great food, great staff. You can’t ask for much more from a restaurant.",
         rating: 5,
         restaurant_id: bluRistoranteId,
         user_id: userJosh.id,
       },
       {
-        first_name: "LeBron",
-        last_name: "James",
+        name: "LeBron James",
         text: "Wonderful service! Delicious food! Comfortable seating and luxurious atmosphere.",
         rating: 5,
         restaurant_id: RamaKrishnaId,
         user_id: userLebron.id,
       },
       {
-        first_name: "LeBron",
-        last_name: "James",
+        name: "LeBron James",
         text: "Prime rib and filet were made spot on. Vegetable sides were made well as was the shrimp and scallops.",
         rating: 4,
         restaurant_id: lastTrainToDelhiId,
         user_id: userLebron.id,
       },
       {
-        first_name: "LeBron",
-        last_name: "James",
+        name: "LeBron James",
         text: "This visit was with a friend who had never been here before. She loved it as much as I do. She said it will be our new go to place!",
         rating: 4,
         restaurant_id: curryishTavernId,
         user_id: userLebron.id,
       },
       {
-        first_name: "LeBron",
-        last_name: "James",
+        name: "LeBron James",
         text: "Had a full 3 course meal in the mid afternoon and every aspect of it was great. Server was named Brittany I believe and she was simply excellent.",
         rating: 5,
         restaurant_id: pukkaId,
         user_id: userLebron.id,
       },
       {
-        first_name: "LeBron",
-        last_name: "James",
+        name: "LeBron James",
         text: "Very nice evening spent with special family.",
         rating: 5,
         restaurant_id: mariachisId,
         user_id: userLebron.id,
       },
       {
-        first_name: "LeBron",
-        last_name: "James",
+        name: "LeBron James",
         text: "First time, and not the last. Very welcoming. The food was deliscious and service very good. Highly recommend.",
         rating: 4,
         restaurant_id: eldoradoTacoId,
         user_id: userLebron.id,
       },
       {
-        first_name: "Cassidy",
-        last_name: "Mancher",
+        name: "Cassidy Mancher",
         text: "Enjoyed our drinks, dinner and dessert. Great service and ambience.",
         rating: 5,
         restaurant_id: mariachisId,
         user_id: userCassidy.id,
       },
       {
-        first_name: "Cassidy",
-        last_name: "Mancher",
+        name: "Cassidy Mancher",
         text: "The food was absolutely on point, we had such a great experience and our server was top notch. ",
         rating: 4,
         restaurant_id: stelvioId,
         user_id: userCassidy.id,
       },
       {
-        first_name: "Cassidy",
-        last_name: "Mancher",
+        name: "Cassidy Mancher",
         text: "The steaks were 'Melt In Your Mouth'!!! Nigel, our waiter was amazing!! Great experience overall!",
         rating: 5,
         restaurant_id: coconutLagoonId,
         user_id: userCassidy.id,
       },
       {
-        first_name: "Cassidy",
-        last_name: "Mancher",
+        name: "Cassidy Mancher",
         text: "It was really great! Just temperature wise it was really chilly. A little mixup at the end with desserts also but overall we really enjoyed the evening",
         rating: 4,
         restaurant_id: bluRistoranteId,
         user_id: userCassidy.id,
       },
       {
-        first_name: "Cassidy",
-        last_name: "Mancher",
+        name: "Cassidy Mancher",
         text: "Food was served cold. Major No No. Fantastic Dessert. Service was good. Heavy Rock music should be toned down. Price vs Quality… not great.",
         rating: 3,
         restaurant_id: laBartolaId,
         user_id: userCassidy.id,
       },
       {
-        first_name: "Cassidy",
-        last_name: "Mancher",
+        name: "Cassidy Mancher",
         text: "Fantastic food and excellent selection. Everything was fresh - and the scones were still warm!",
         rating: 4,
         restaurant_id: eldoradoTacoId,
         user_id: userCassidy.id,
       },
       {
-        first_name: "Cassidy",
-        last_name: "Mancher",
+        name: "Cassidy Mancher",
         text: "Fantastic food and excellent selection. Everything was fresh - and the scones were still warm!",
         rating: 4,
         restaurant_id: utsavId,

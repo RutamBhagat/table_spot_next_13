@@ -1,64 +1,74 @@
 "use client";
-import useAuth from "@/hooks/useAuth";
+import React, { useState } from "react";
+import SignInButton from "./SignInButton";
 import Link from "next/link";
-import React, { useContext, useState } from "react";
-import { AuthenticationContext } from "../context/AuthContext";
-import LoginModal from "./LoginModal";
-import SignUpModal from "./SignUpModal";
+import SessionButton from "./SessionButton";
+import { useSession } from "next-auth/react";
+import SearchBar from "../(Pages Group)/components/SearchBar";
 
-const Navbar = () => {
-  const [isLoginHidden, setIsLoginHidden] = useState(true);
-  const [isSignUpHidden, setIsSignUpHidden] = useState(true);
-  const { loading, data } = useContext(AuthenticationContext);
-  const { signOut } = useAuth();
-
-  const switchModel = () => {
-    setIsLoginHidden(!isLoginHidden);
-    setIsSignUpHidden(!isSignUpHidden);
-  };
+export default function Navbar() {
+  const { data: session } = useSession();
+  const [state, setState] = useState(false);
 
   return (
-    <nav className="border-gray-200 px-2 sm:px-4 py-2.5 bg-gray-900">
-      <div className="container flex rounded flex-wrap items-center justify-between mx-auto">
-        <Link href="/" className="flex items-center">
-          <img src="https://img.icons8.com/nolan/512/dyndns.png" className="h-6 mr-3 sm:h-9" alt="Flowbite Logo" />
-          <span className="self-center text-xl font-semibold whitespace-nowrap text-white">TableSpot</span>
-        </Link>
-        <div className="flex md:order-2">
-          <div>
-            {loading ? (
-              <span></span>
-            ) : (
-              <div className="flex">
-                {data ? (
-                  <button
-                    onClick={signOut}
-                    className="block p-1 mr-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    type="button"
-                  >
-                    Sign Out
-                  </button>
-                ) : (
-                  <>
-                    <LoginModal
-                      isLoginHidden={isLoginHidden}
-                      setIsLoginHidden={setIsLoginHidden}
-                      switchModel={switchModel}
-                    />
-                    <SignUpModal
-                      isSignUpHidden={isSignUpHidden}
-                      setIsSignUpHidden={setIsSignUpHidden}
-                      switchModel={switchModel}
-                    />
-                  </>
-                )}
-              </div>
-            )}
+    <nav
+      className={`bg-[#0a081a] md:text-sm ${
+        state ? "shadow-lg rounded-xl border mx-2 mt-2 md:shadow-none md:border-none md:mx-2 md:mt-0" : ""
+      }`}
+    >
+      <div className="gap-x-14 items-center max-w-screen-xl mx-auto px-4 md:flex md:px-8">
+        <div className="flex items-center justify-between py-2.5 md:block">
+          <Link href="/" className="flex gap-3 justify-center items-center font-semibold text-2xl uppercase text-white">
+            <img
+              className="rounded-full bg-white"
+              src={
+                session?.user.image
+                  ? session?.user.image
+                  : "https://spot.io/wp-content/uploads/2020/03/Spot_Logo_Color_3mar20_RGB-1-600x306.png"
+              }
+              width={100}
+              height={50}
+            />
+            Table Spot
+          </Link>
+          <div className="md:hidden">
+            <button className="menu-btn text-gray-500 hover:text-gray-800" onClick={() => setState(!state)}>
+              {state ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fillRule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
+        <div className={`flex-1 items-center mt-8 md:mt-0 md:flex ${state ? "block" : "hidden"} `}>
+          <ul className="justify-center items-center space-y-6 md:flex md:space-x-6 md:space-y-0">
+            <SearchBar />
+          </ul>
+          <div className="flex-1 gap-x-6 items-center justify-end mt-6 space-y-6 md:flex md:space-y-0 md:mt-0">
+            <Link href="/auth/register" className="block text-gray-200 hover:text-gray-400">
+              Register
+            </Link>
+            <SignInButton />
+            {/* <SessionButton /> */}
           </div>
         </div>
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}

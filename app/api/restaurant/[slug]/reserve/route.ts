@@ -4,7 +4,7 @@ import { findAvailableTables } from "@/services/restaurant/findAvailableTables";
 
 export async function POST(request: Request, { params }: { params: { slug: string } }) {
   const req = await request.json(); // req now is the body
-  const { bookerEmail, bookerPhone, bookerFirstName, bookerLastName, bookerOccasion, bookerRequest } = req;
+  const { bookerEmail, bookerPhone, bookerName, bookerOccasion, bookerRequest } = req;
 
   const { searchParams } = new URL(request.url);
   const slug = params.slug;
@@ -55,8 +55,8 @@ export async function POST(request: Request, { params }: { params: { slug: strin
 
   // Create an object with two empty arrays for 2 seat and 4 seat tables
   const tablesCount: {
-    2: number[];
-    4: number[];
+    2: string[];
+    4: string[];
   } = {
     2: [],
     4: [],
@@ -74,7 +74,7 @@ export async function POST(request: Request, { params }: { params: { slug: strin
   }
 
   // Create an empty array to store the ids of the tables we will book
-  const tablesToBooks: number[] = [];
+  const tablesToBooks: string[] = [];
   // Create a variable to store the number of seats remaining to be booked
   let seatsRemaining = parseInt(partySize);
 
@@ -115,8 +115,7 @@ export async function POST(request: Request, { params }: { params: { slug: strin
       booking_time: new Date(`${day}T${time}`),
       booker_email: bookerEmail,
       booker_phone: bookerPhone,
-      booker_first_name: bookerFirstName,
-      booker_last_name: bookerLastName,
+      booker_name: bookerName,
       booker_occasion: bookerOccasion,
       booker_request: bookerRequest,
       restaurant_id: restaurant.id,

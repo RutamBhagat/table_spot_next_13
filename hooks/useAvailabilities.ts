@@ -7,17 +7,14 @@ export default function useAvailabilities() {
   const [error, setError] = useState(null);
   const [data, setData] = useState<{ time: Time; available: boolean }[] | null>(null);
 
-  const fetchAvailabilities = async ({
-    slug,
-    partySize,
-    time,
-    day,
-  }: {
+  type Props = {
     slug: string;
     partySize: string;
     time: string;
     day: string;
-  }) => {
+  };
+
+  const fetchAvailabilities = async ({ slug, partySize, time, day }: Props) => {
     setLoading(true);
 
     try {
@@ -38,4 +35,3 @@ export default function useAvailabilities() {
 
   return { loading, error, data, fetchAvailabilities };
 }
-

@@ -10,7 +10,7 @@ export const findAvailableTables = async ({
   day: string;
   time: string;
   restaurant: {
-    id: number;
+    id: string;
     tables: Table[];
     open_time: string;
     close_time: string;
@@ -77,6 +77,7 @@ export const findAvailableTables = async ({
   for (let inst of searchTimesWithTables) {
     inst.tables = inst.tables.filter((table) => {
       if (bookingTablesObj[inst.date.toISOString()]) {
+        // @ts-ignore
         if (bookingTablesObj[inst.date.toISOString()][table.id]) {
           return false;
         }

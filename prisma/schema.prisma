@@ -16,8 +16,59 @@ enum PRICE {
   EXPENSIVE
 }
 
+model User {
+  id            String    @id @default(cuid())
+  name          String    @default("Anonymous")
+  city          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  phone         String?
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  reviews       Review[]
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
 model Restaurant {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(cuid())
   name        String
   main_image  String
   images      String[]
@@ -30,27 +81,27 @@ model Restaurant {
   bookings    Booking[]
   tables      Table[]
   reviews     Review[]
-  location_id Int
+  location_id String
   location    Location  @relation(fields: [location_id], references: [id], onDelete: Cascade)
-  cuisine_id  Int
+  cuisine_id  String
   cuisine     Cuisine   @relation(fields: [cuisine_id], references: [id], onDelete: Cascade)
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
 }
 
 model Item {
-  id            Int        @id @default(autoincrement())
+  id            String     @id @default(cuid())
   name          String
   price         String
   description   String
-  restaurant_id Int
+  restaurant_id String
   restaurant    Restaurant @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
   created_at    DateTime   @default(now())
   updated_at    DateTime   @updatedAt
 }
 
 model Location {
-  id          Int          @id @default(autoincrement())
+  id          String       @id @default(cuid())
   name        String
   restaurants Restaurant[]
   created_at  DateTime     @default(now())
@@ -58,7 +109,7 @@ model Location {
 }
 
 model Cuisine {
-  id          Int          @id @default(autoincrement())
+  id          String       @id @default(cuid())
   name        String
   restaurants Restaurant[]
   created_at  DateTime     @default(now())
@@ -66,53 +117,38 @@ model Cuisine {
 }
 
 model Review {
-  id            Int        @id @default(autoincrement())
-  first_name    String
-  last_name     String
+  id            String     @id @default(cuid())
+  name          String     @default("Anonymous")
   text          String
   rating        Float
-  restaurant_id Int
+  restaurant_id String
   restaurant    Restaurant @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
-  user_id       Int
+  user_id       String
   user          User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
   created_at    DateTime   @default(now())
   updated_at    DateTime   @updatedAt
 }
 
-model User {
-  id         Int      @id @default(autoincrement())
-  first_name String
-  last_name  String
-  city       String
-  email      String   @unique
-  password   String
-  phone      String
-  reviews    Review[]
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
-
 model Booking {
-  id                Int                @id @default(autoincrement())
-  number_of_people  Int
-  booking_time      DateTime
-  booker_email      String
-  booker_phone      String
-  booker_first_name String
-  booker_last_name  String
-  booker_occasion   String?
-  booker_request    String?
-  restaurant_id     Int
-  restaurant        Restaurant         @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
-  tables            BookingsOnTables[]
-  created_at        DateTime           @default(now())
-  updated_at        DateTime           @updatedAt
+  id               String             @id @default(cuid())
+  number_of_people Int
+  booking_time     DateTime
+  booker_email     String
+  booker_phone     String
+  booker_name      String
+  booker_occasion  String?
+  booker_request   String?
+  restaurant_id    String
+  restaurant       Restaurant         @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
+  tables           BookingsOnTables[]
+  created_at       DateTime           @default(now())
+  updated_at       DateTime           @updatedAt
 }
 
 model Table {
-  id            Int                @id @default(autoincrement())
+  id            String             @id @default(cuid())
   seats         Int
-  restaurant_id Int
+  restaurant_id String
   restaurant    Restaurant         @relation(fields: [restaurant_id], references: [id], onDelete: Cascade)
   bookings      BookingsOnTables[]
   created_at    DateTime           @default(now())
@@ -120,9 +156,9 @@ model Table {
 }
 
 model BookingsOnTables {
-  booking_id Int
+  booking_id String
   booking    Booking  @relation(fields: [booking_id], references: [id], onDelete: Cascade)
-  table_id   Int
+  table_id   String
   table      Table    @relation(fields: [table_id], references: [id], onDelete: Cascade)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
