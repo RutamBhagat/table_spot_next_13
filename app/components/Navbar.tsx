@@ -18,19 +18,28 @@ export default function Navbar() {
     >
       <div className="gap-x-14 items-center max-w-screen-xl mx-auto px-4 md:flex md:px-8">
         <div className="flex items-center justify-between py-2.5 md:block">
-          <Link href="/" className="flex gap-3 justify-center items-center font-semibold text-2xl uppercase text-white">
-            <img
-              className="rounded-full bg-white"
-              src={
-                session?.user.image
-                  ? session?.user.image
-                  : "https://spot.io/wp-content/uploads/2020/03/Spot_Logo_Color_3mar20_RGB-1-600x306.png"
-              }
-              width={100}
-              height={50}
-            />
-            Table Spot
-          </Link>
+          {session?.user.image ? (
+            <Link
+              href="/"
+              className="flex gap-3 justify-center items-center font-semibold text-2xl uppercase text-white"
+            >
+              <img className="rounded-full bg-white" src={session?.user.image} width={50} height={50} />
+              Table Spot
+            </Link>
+          ) : (
+            <Link
+              href="/"
+              className="flex gap-3 justify-center items-center font-semibold text-2xl uppercase text-white"
+            >
+              <img
+                className="rounded-full bg-white"
+                src="https://spot.io/wp-content/uploads/2020/03/Spot_Logo_Color_3mar20_RGB-1-600x306.png"
+                width={100}
+                height={50}
+              />
+              Table Spot
+            </Link>
+          )}
           <div className="md:hidden">
             <button className="menu-btn text-gray-500 hover:text-gray-800" onClick={() => setState(!state)}>
               {state ? (

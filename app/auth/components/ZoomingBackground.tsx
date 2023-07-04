@@ -10,9 +10,9 @@ export default function ZoomingBackground({ imageSrc }: Props) {
         className="absolute w-full h-full transition-all duration-500 ease-in-out transform object-center object-cover hover:scale-150 group-hover:scale-150"
       ></img>
       <h1 className="absolute cursor-default text-5xl font-black transition-all duration-500 ease-in-out transform scale-150 text-gray-50 opacity-60 text-center hover:scale-100 group-hover:scale-100">
-        NORD
+        TABLE
         <br />
-        STONE
+        SPOT
       </h1>
     </div>
   );
