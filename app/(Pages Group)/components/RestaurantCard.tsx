@@ -31,17 +31,19 @@ export default async function RestaurantCard({ restaurant }: Props) {
       <div className="p-5">
         <h3 className="font-bold text-2xl mb-2">{restaurant.name}</h3>
         <div className="flex justify-between text-reg font-light capitalize mb-2">
-          {/* @ts-ignore */}
-          <p className="text-center">Cuisine {restaurant.cuisine.name}</p>
+          <div>
+            {/* @ts-ignore */}
+            <p className="text-start">Cuisine {restaurant.cuisine.name}</p>
+            {/* @ts-ignore */}
+            <p className="text-start">Location {restaurant.location.name}</p>
+          </div>
           <div className="flex justify-center items-center">
             <PriceComponent price={restaurant.price} />
           </div>
-          {/* @ts-ignore */}
-          <p className="text-center">Location {restaurant.location.name}</p>
         </div>
-        <div className="flex justify-between py-2">
+        <div className="flex justify-between items-center py-2">
           <p className="text-sm mt-1 font-bold">Booked {numberOfBookings} times today</p>
-          <div className="flex items-start">
+          <div className="flex flex-col items-start">
             <StarsComponent stars={averageRestaurantRating} />
             {/* @ts-ignore */}
             <p className="ml-2">{restaurant.reviews.length} reviews</p>
