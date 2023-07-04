@@ -1,11 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
-import { type Time } from "@/utils/convertToDisplayTime";
 
 export default function useAvailabilities() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [data, setData] = useState<{ time: Time; available: boolean }[] | null>(null);
+  const [data, setData] = useState<{ time: string; available: boolean }[] | null>(null);
 
   type Props = {
     slug: string;

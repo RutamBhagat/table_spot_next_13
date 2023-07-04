@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import shortid from "shortid";
 import DatePicker from "react-datepicker";
 import useAvailabilities from "@/hooks/useAvailabilities";
-import { convertToDisplayTime } from "@/utils/convertToDisplayTime";
 import { partySize as partySizes, times } from "@/data";
+import convertToDisplayTime from "@/lib/Restaurant/convertToDisplayTime";
 //renamed partySize since it was conflicting with the useState defined below
 //you dont need to specify @data/index.tsx since it automatically looks for that file in the data folder
 

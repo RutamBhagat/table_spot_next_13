@@ -1,5 +1,4 @@
-import { convertToDisplayTime, Time } from "@/utils/convertToDisplayTime";
-import React from "react";
+import convertToDisplayTime from "@/lib/Restaurant/convertToDisplayTime";
 import { format } from "date-fns";
 import Link from "next/link";
 
@@ -31,7 +30,7 @@ const Header = ({
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{name}</h5>
         <div className="flex mt-3">
           <p className="mr-6">{format(new Date(date), "ccc, LLL d")}</p>
-          <p className="mr-6">{convertToDisplayTime(time as Time)}</p>
+          <p className="mr-6">{convertToDisplayTime(time)}</p>
           <p className="mr-6">{partySize} people</p>
         </div>
       </div>
